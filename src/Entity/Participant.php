@@ -47,10 +47,7 @@ class Participant
      */
     private $pseudo;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $role;
+    
 
     /**
      * @ORM\Column(type="boolean")
@@ -66,6 +63,11 @@ class Participant
      * @ORM\ManyToOne(targetEntity=Campus::class, inversedBy="participants")
      */
     private $campus;
+
+    /**
+     * @ORM\Column(type="json")
+     */
+    private $role = [];
 
     public function getId(): ?int
     {
