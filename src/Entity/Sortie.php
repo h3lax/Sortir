@@ -48,7 +48,8 @@ class Sortie
     private $infosSortie;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\ManyToOne(targetEntity=Etat::class, inversedBy="sorties")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $etat;
 
@@ -129,15 +130,16 @@ class Sortie
         return $this;
     }
 
-    public function getEtat(): ?string
+    public function getEtat(): ?Etat
     {
         return $this->etat;
     }
 
-    public function setEtat(string $etat): self
+    public function setEtat(?Etat $etat): self
     {
         $this->etat = $etat;
 
         return $this;
     }
+
 }
