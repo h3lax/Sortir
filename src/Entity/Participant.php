@@ -6,11 +6,14 @@ use App\Repository\ParticipantRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=ParticipantRepository::class)
+ * @UniqueEntity(fields={"mail"})
+ * @UniqueEntity(fields={"pseudo"})
  */
 class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -60,7 +63,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     private $actif;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=180, unique=true)
      */
     private $pseudo;
 
@@ -73,16 +76,18 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\ManyToMany(targetEntity=Sortie::class, inversedBy="participants")
      */
-    private $sortie;
+    private $sorties;
 
     /**
      * @ORM\OneToMany(targetEntity=Sortie::class, mappedBy="organisateur")
      */
     private $sortiesOrganisees;
 
+
+
     public function __construct()
     {
-        $this->sortie = new ArrayCollection();
+        $this->sorties = new ArrayCollection();
         $this->sortiesOrganisees = new ArrayCollection();
     }
 
@@ -130,7 +135,12 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->motPasse;
     }
 
-    public function setPassword(string $motPasse): self
+    public function getMotPasse(): string
+    {
+        return $this->motPasse;
+    }
+
+    public function setMotPasse(string $motPasse): self
     {
         $this->motPasse = $motPasse;
 
@@ -246,15 +256,15 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Sortie>
      */
-    public function getSortie(): Collection
+    public function getSorties(): Collection
     {
-        return $this->sortie;
+        return $this->sorties;
     }
 
     public function addSortie(Sortie $sortie): self
     {
-        if (!$this->sortie->contains($sortie)) {
-            $this->sortie[] = $sortie;
+        if (!$this->sorties->contains($sortie)) {
+            $this->sorties[] = $sortie;
         }
 
         return $this;
@@ -262,7 +272,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeSortie(Sortie $sortie): self
     {
-        $this->sortie->removeElement($sortie);
+        $this->sorties->removeElement($sortie);
 
         return $this;
     }
@@ -298,8 +308,8 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
 
-    public function getRoles()
+    public function getRoles():array
     {
-        // TODO: Implement getRoles() method.
+        return $this->administrateur ?['ROLE_ADMIN']:['ROLE_USER'];
     }
 }

@@ -30,12 +30,12 @@ class Sortie
     private $dateHeureDebut;
 
     /**
-     * @ORM\Column(type="dateinterval")
+     * @ORM\Column(type="integer")
      */
     private $duree;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="date")
      */
     private $dateLimiteInscription;
 
@@ -56,7 +56,7 @@ class Sortie
     private $etat;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Participant::class, mappedBy="sortie")
+     * @ORM\ManyToMany(targetEntity=Participant::class, mappedBy="sorties")
      */
     private $participants;
 
