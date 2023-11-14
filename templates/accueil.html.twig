@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+
+    <div>
+        <p>Date du jour : {{currentDate|date('d-m-y')}}</p>
+        <p>Participant : {#prénom et nom de l'user connecté#}</p>
+    </div>
+
+    <div>
+        <h4>Filtrer les sorties</h4>
+        <p>Campus : </p>
+        <p>Le nom de la sortie contient : </p>
+        <p>Entre {#date #} et {#date #}</p>
+
+    </div>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nom de la sortie</th>
+                <th>Date de la sortie</th>
+                <th>Clôture</th>
+                <th>Inscrits / places</th>
+                <th>Etat</th>
+                <th>Inscrit</th>
+                <th>Organisateur</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sortie in sorties %}
+            <tr>
+                <td>{{sortie.nom}}</td>
+                <td>{{sortie.dateHeureDebut|date('d-m-y')}}</td>
+                <td>{{sortie.dateLimiteInscription|date('d-m-y')}}</td>
+                <td>{{sortie.nbInscriptionsMax}}</td>
+                <td></td>
+                {#if user connecté est inscrit alors, écrire une croix#}
+                <td>a</td>
+                <td></td>
+                <td><a href="{{path('Sorties_affichage', {'id': sortie.id})}}">Afficher</a></td>
+            </tr>
+        </tbody>
+{% endfor %}
+    </table>
+
+    <a href="#">Créer une sortie</a>
+
+{% endblock %}
