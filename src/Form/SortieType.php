@@ -6,13 +6,12 @@ use App\Entity\Campus;
 use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Entity\Ville;
-use Doctrine\DBAL\Types\FloatType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateIntervalType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -43,17 +42,19 @@ class SortieType extends AbstractType
                 'choice_label' => 'nom',
                 ])
             ->add('ville', EntityType::class,[
+                'mapped'=> false,
                 'label' => 'Ville',
                 'class' => Ville::class,
                 'choice_label' => 'nom',
             ])
             ->add('lieu',EntityType::class,[
+                'mapped'=> false,
                 'label' => 'Lieu',
                 'class' => Lieu::class,
                 'choice_label' => 'nom',
             ])
-            ->add('latitude', FloatType::class)
-            ->add('longitude', FloatType::class)
+            ->add('latitude', NumberType::class, ['mapped'=> false])
+            ->add('longitude', NumberType::class, ['mapped'=> false])
         ;
     }
 
