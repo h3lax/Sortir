@@ -26,6 +26,8 @@ class ParticipantRepository extends ServiceEntityRepository implements PasswordU
         parent::__construct($registry, Participant::class);
     }
 
+
+    //Pour s'Identifier avec son pseudo ou son mail
     /**
      * @throws NonUniqueResultException
      */
