@@ -297,6 +297,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+
     public function getRoles()
     {
         // TODO: Implement getRoles() method.
