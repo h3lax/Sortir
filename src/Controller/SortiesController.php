@@ -16,7 +16,6 @@ class SortiesController extends AbstractController {
     /**
      * @ROUTE("/accueil", name="accueil")
      */
-
     public function accueil(SortieRepository $sortieRepository):Response {
 
         $sorties = $sortieRepository->findAll();

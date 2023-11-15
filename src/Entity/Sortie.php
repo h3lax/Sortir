@@ -78,10 +78,7 @@ class Sortie
      */
     private $lieu;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $motClef;
+  
 
     public function __construct()
     {
@@ -240,16 +237,6 @@ class Sortie
         return $this;
     }
 
-    public function getMotClef(): ?string
-    {
-        return $this->motClef;
-    }
-
-    public function setMotClef(?string $motClef): self
-    {
-        $this->motClef = $motClef;
-
-        return $this;
-    }
+    
 
 }

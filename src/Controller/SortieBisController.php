@@ -26,3 +26,5 @@ class SortieBisController extends AbstractController
         return $this->render('sortie/creer.html.twig', ['sortieForm' => $sortieForm->createView()]);
     }
 }
+
+//CHANGER LES DATES DANS LA BDD POUR QUE CE SOIT DATE ET PAS DATETIME

@@ -5,7 +5,7 @@
 {% block body %}
 
     <div>
-        <p>Date du jour : {{currentDate|date('d-m-y')}}</p>
+        <p>Date du jour : {{currentDate|date('Y-m-d')}}</p>
         <p>Participant : {#prénom et nom de l'user connecté#}</p>
     </div>
 
@@ -34,8 +34,8 @@
             {% for sortie in sorties %}
             <tr>
                 <td>{{sortie.nom}}</td>
-                <td>{{sortie.dateHeureDebut|date('d-m-y')}}</td>
-                <td>{{sortie.dateLimiteInscription|date('d-m-y')}}</td>
+                <td>{{sortie.dateHeureDebut|date('Y-m-d-h-i-s')}}</td>
+                <td>{{sortie.dateLimiteInscription|date('Y-m-d-h-i-s')}}</td>
                 <td>{{sortie.nbInscriptionsMax}}</td>
                 <td></td>
                 {#if user connecté est inscrit alors, écrire une croix#}
