@@ -39,6 +39,10 @@ class SortieRepository extends ServiceEntityRepository
         }
     }
 
+    public function rechercheFiltre(){
+
+    }
+
 //    /**
 //     * @return Sortie[] Returns an array of Sortie objects
 //     */
