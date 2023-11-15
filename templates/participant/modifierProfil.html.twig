@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block body %}
+    <div>
+        {{ form_start(modifierForm) }}
+
+        {{ form_widget(modifierForm) }}
+        <button>Valider</button>
+
+        {{ form_end(modifierForm) }}
+    </div>
+{% endblock %}
+
