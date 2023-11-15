@@ -30,7 +30,7 @@ class SortieBisController extends AbstractController
         $sortieForm = $this ->createForm(SortieType::class, $sortie);
 
         //Juste pour que ça marche, à virer apres
-        $etats = $etatRepository->findBy(['id' => 1]);
+        $etats = $etatRepository->findBy(['libelle' => 'Ouvert']);
         $etat = $etats[0];
         if($etat){
             $sortie -> setEtat($etat);
