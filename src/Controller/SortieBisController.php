@@ -4,6 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Sortie;
 use App\Form\SortieType;
+use App\Repository\EtatRepository;
+use App\Repository\ParticipantRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,10 +19,33 @@ class SortieBisController extends AbstractController
     /**
      * @Route("/creer", name="creer")
      */
-    public function creer(Request $request): Response
+    public function creer(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        EtatRepository $etatRepository,
+        ParticipantRepository  $participantRepository
+    ): Response
     {
         $sortie = new Sortie();
         $sortieForm = $this ->createForm(SortieType::class, $sortie);
+
+        //Juste pour que ça marche, à virer apres
+        $etats = $etatRepository->findBy(['id' => 1]);
+        $etat = $etats[0];
+        if($etat){
+            $sortie -> setEtat($etat);
+        }
+        $organisateur = $participantRepository->findBy(['id' => 1]);
+        $sortie -> setOrganisateur($organisateur[0]);
+
+
+        $sortieForm -> handleRequest($request);
+
+        if ($sortieForm -> isSubmitted() && $sortieForm ->isValid()){
+            $entityManager -> persist($sortie);
+            $entityManager ->flush();
+
+        }
 
 
 
@@ -27,4 +53,3 @@ class SortieBisController extends AbstractController
     }
 }
 
-//CHANGER LES DATES DANS LA BDD POUR QUE CE SOIT DATE ET PAS DATETIME

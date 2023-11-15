@@ -78,11 +78,6 @@ class Sortie
      */
     private $lieu;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $motClef;
-
     public function __construct()
     {
         $this->participants = new ArrayCollection();
@@ -236,18 +231,6 @@ class Sortie
     public function setLieu(?Lieu $lieu): self
     {
         $this->lieu = $lieu;
-
-        return $this;
-    }
-
-    public function getMotClef(): ?string
-    {
-        return $this->motClef;
-    }
-
-    public function setMotClef(?string $motClef): self
-    {
-        $this->motClef = $motClef;
 
         return $this;
     }
