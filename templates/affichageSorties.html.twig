@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{sortie.nom}}{% endblock %}
+
+{% block body %}
+    <h2>Afficher une sortie</h2>
+
+    <div>
+            <p>Nom de la sortie : {{sortie.nom}} </p>
+            <p>Campus : {{sortie.siteOrganisateur.nom}} </p>
+            <p>Date et heure de la sortie : {{sortie.dateHeureDebut|date('d-m-y')}} </p>
+            <p>Lieu : {{sortie.lieu.nom}} </p>
+            <p>Date limite d'inscription : {{sortie.dateLimiteInscription|date('d-m-y')}} </p>
+            <p>Rue : {{sortie.lieu.rue}} </p>
+            <p>Nombre de places : {{sortie.nbInscriptionsMax}} </p>
+            <p>Code postal : {{sortie.lieu.ville.codePostal}} </p>
+            <p>Durée : </p>
+            <p>Latitude : {{sortie.lieu.latitude}} </p>
+            <p>Description et infos : {{sortie.infosSortie}} </p>
+            <p>Longitude : {{sortie.lieu.longitude}} </p>
+    </div>
+
+    <div>
+        <h4>Liste des participants inscrits : </h4>
+        
+        {#Faire une boucle pour parcourir le tableau des participants#}
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Pseudo</th>
+                    <th>Nom</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Exemple 1</td>
+                    <td>Exemple 1</td>
+                </tr>
+                <tr>
+                    <td>Exemple 2</td>
+                    <td>Exemple 2</td>
+                </tr>
+                <tr>
+                    <td>Exemple 3</td>
+                    <td>Exemple 3</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
+
