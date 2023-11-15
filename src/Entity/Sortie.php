@@ -239,7 +239,6 @@ class Sortie
 
         return $this;
     }
-
     public function getMotClef(): ?string
     {
         return $this->motClef;
@@ -251,5 +250,6 @@ class Sortie
 
         return $this;
     }
+
 
 }
