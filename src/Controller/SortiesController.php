@@ -32,38 +32,13 @@ class SortiesController extends AbstractController {
         $filtreSortiesForm = $this -> createForm(FiltreSortiesType::class);
         $filtreSortiesForm -> handleRequest($request);
         //initialisation du tableau de conditions pour constituer la requete
-        $conditions = [];
-        //Si on lance un filtre avec le bouton
+        $donnees = [];
+        //Si on lance un filtre avec le bouton on transmet les données dans le tableau
         if ($filtreSortiesForm->isSubmitted() && $filtreSortiesForm->isValid()) {
             $donnees = $filtreSortiesForm->getData();
-            //check de toutes les conditions
-            if ($donnees['campus']) {
-                $conditions['campus'] =  'siteOrganisateur='.$donnees['campus']->getId();
-            }
-            if ($donnees['nom']) {
-                $conditions['nom'] = 'nom='.$donnees['nom'];
-            }
-            if ($donnees['debut_periode']) {
-                $conditions['debut_periode'] = 'dateHeureDebut>'.$donnees['debut_periode']->format('Y-m-d');
-            }
-            if ($donnees['fin_periode']) {
-                $conditions['fin_periode'] = 'dateHeureDebut<'.$donnees['fin_periode']->format('Y-m-d');
-            }
-            if ($donnees['organisateur']) {
-                $conditions['organisateur'] = 'organisateur='.$this->getUser()->getId();
-            }
-            if ($donnees['inscrit']) {
-                $conditions['inscrit'] = $donnees['organisateur'];
-            }
-            if ($donnees['pasInscrit']) {
-                $conditions['pasInscrit'] = $donnees['organisateur'];
-            }
-            if ($donnees['past']) {
-                $conditions['past'] = $donnees['organisateur'];
-            }
         }
 
-        $sorties = $sortieRepository->rechercheFiltre($conditions);
+        $sorties = $sortieRepository->rechercheFiltre($donnees);
         $currentDate = new \DateTime();
 
         return $this->render("sortie/accueil.html.twig", [
