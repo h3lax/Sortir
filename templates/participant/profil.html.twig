@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2> Bienvenue sur votre profil {{ participant.pseudo }}</h2>
+    <ul>
+        <li>Prénom: {{ participant.prenom }}</li>
+        <li>Nom: {{ participant.nom }}</li>
+        <li>Téléphone: {{ participant.telephone }}</li>
+        <li>Email: {{ participant.mail }}</li>
+        <li>Campus: {{ participant.campus.nom }}</li>
+    </ul>
+
+    <button type="submit">
+        Retour
+    </button>
+
+{% endblock %}
+
+{% block title %}
+Profil Utilisateur | {{ parent() }}
+{% endblock %}
+
