@@ -39,8 +39,18 @@ class SortieRepository extends ServiceEntityRepository
         }
     }
 
-    public function rechercheFiltre(){
+    public function rechercheFiltre($conditions){
+        if (!empty($conditions)){
+            $queryBuilder = $this->createQueryBuilder('s');
+            foreach ($conditions as $condition) {
+                $queryBuilder->andWhere('s.'.$condition);
+            }
+            $query = $queryBuilder->getQuery();
 
+            return $query->getResult();
+        }else{
+           return $this->findAll();
+        }
     }
 
 //    /**

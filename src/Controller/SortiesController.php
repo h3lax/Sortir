@@ -38,19 +38,19 @@ class SortiesController extends AbstractController {
             $donnees = $filtreSortiesForm->getData();
             //check de toutes les conditions
             if ($donnees['campus']) {
-                $conditions['campus'] =  $donnees['campus']->getId();
+                $conditions['campus'] =  'siteOrganisateur='.$donnees['campus']->getId();
             }
             if ($donnees['nom']) {
-                $conditions['nom'] = $donnees['nom'];
+                $conditions['nom'] = 'nom='.$donnees['nom'];
             }
             if ($donnees['debut_periode']) {
-                $conditions['debut_periode'] = $donnees['debut_periode']->format('Y-m-d');
+                $conditions['debut_periode'] = 'dateHeureDebut>'.$donnees['debut_periode']->format('Y-m-d');
             }
             if ($donnees['fin_periode']) {
-                $conditions['fin_periode'] = $donnees['fin_periode']->format('Y-m-d');
+                $conditions['fin_periode'] = 'dateHeureDebut<'.$donnees['fin_periode']->format('Y-m-d');
             }
             if ($donnees['organisateur']) {
-                $conditions['organisateur'] = $donnees['organisateur'];
+                $conditions['organisateur'] = 'organisateur='.$this->getUser()->getId();
             }
             if ($donnees['inscrit']) {
                 $conditions['inscrit'] = $donnees['organisateur'];
@@ -63,7 +63,7 @@ class SortiesController extends AbstractController {
             }
         }
 
-        $sorties = $sortieRepository->findAll();
+        $sorties = $sortieRepository->rechercheFiltre($conditions);
         $currentDate = new \DateTime();
 
         return $this->render("sortie/accueil.html.twig", [
