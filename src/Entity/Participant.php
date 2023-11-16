@@ -6,9 +6,12 @@ use App\Repository\ParticipantRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Faker\Core\File;
+use phpDocumentor\Reflection\Types\Self_;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass=ParticipantRepository::class)
@@ -23,6 +26,18 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="integer")
      */
     private $id;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
+     */
+    private $photoProfil;
+
+    /**
+     * @Vich\UploadableField(mapping="photo_profil", fileNameProperty="photo")
+     * @var File
+     */
+    private $photoFile;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
@@ -312,4 +327,29 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->administrateur ?['ROLE_ADMIN']:['ROLE_USER'];
     }
+
+    public function getPhotoProfil(): ?string
+    {
+        return $this->photoProfil;
+    }
+
+    public function setPhotoProfil(string $photoProfil): self
+    {
+        $this->photoProfil = $photoProfil;
+
+        return $this;
+    }
+
+    public function getPhotoFile(): File
+    {
+        return $this->photoFile;
+    }
+
+    public function setPhotoFile(File $photoFile): self
+    {
+        $this->photoFile = $photoFile;
+
+        return $this;
+    }
+
 }

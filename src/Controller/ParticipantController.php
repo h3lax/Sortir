@@ -48,6 +48,7 @@ class ParticipantController extends AbstractController
             }
 
             $entityManager = $this->getDoctrine()->getManager();
+            $entityManager ->persist($participant);
             $entityManager->flush();
 
             $this->addFlash('success', 'Profil mis à jour avec succès.');

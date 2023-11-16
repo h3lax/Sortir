@@ -19,6 +19,7 @@ use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class ModifierProfilType extends AbstractType
 {
@@ -54,7 +55,13 @@ class ModifierProfilType extends AbstractType
                         'minMessage'=>'Le mot de passe doit faire au moins {{ limit }} caractères'
                     ])]])
 
-           ->add('campus', EntityType::class, ['class'=>Campus::class, 'choice_label'=>'nom']);
+            ->add('campus', EntityType::class, ['class'=>Campus::class, 'choice_label'=>'nom'])
+
+            ->add('photoFile', VichImageType::class, ['required' => false,'allow_delete' => true,'download_uri' => true ]);
+
+
+
+
 
     }
 
