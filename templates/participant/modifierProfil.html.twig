@@ -8,8 +8,24 @@
     <div>
         {{ form_start(modifierForm) }}
 
-        {{ form_widget(modifierForm) }}
+        {{ form_row(modifierForm.pseudo, { label: 'Pseudo:' }) }}
+
+        {{ form_row(modifierForm.prenom, { label: 'Prénom:' }) }}
+
+        {{ form_row(modifierForm.nom, { label: 'Nom:' }) }}
+
+        {{ form_row(modifierForm.telephone, { label: 'Téléphone:' }) }}
+
+        {{ form_row(modifierForm.mail, { label: 'Email:' }) }}
+
+        {{ form_row(modifierForm.motPasse.first, { label: 'Mot de passe:' }) }}
+
+        {{ form_row(modifierForm.motPasse.second, { label: 'Confirmez le mot de passe:' }) }}
+
+        {{ form_row(modifierForm.campus, { label: 'Campus:' }) }}
+
         <button>Valider</button>
+        <button>Annuler</button>
 
         {{ form_end(modifierForm) }}
     </div>
