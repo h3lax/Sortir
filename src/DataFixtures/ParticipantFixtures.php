@@ -21,7 +21,7 @@ class ParticipantFixtures extends Fixture
         $admin -> setTelephone($faker->phoneNumber);
         $admin -> setMail('michel-michel@admin.com');
         $admin -> setPseudo('admin');
-        $admin -> setMotPasse('azerty');
+        $admin -> setMotPasse('$2y$13$TZ1Pilxq1whZwEmcCfhp2OaYyvMG6NqydEBYmaIc/3AIXxovaf6sW');
         $admin -> setAdministrateur(true);
         $admin -> setCampus($faker->randomElement($campus));
         $admin -> setActif(true);
@@ -34,7 +34,7 @@ class ParticipantFixtures extends Fixture
             $participant -> setTelephone($faker->phoneNumber);
             $participant -> setMail($faker->unique()->email);
             $participant -> setPseudo($faker->unique()->userName);
-            $participant -> setMotPasse('azerty');
+            $participant -> setMotPasse('$2y$13$TZ1Pilxq1whZwEmcCfhp2OaYyvMG6NqydEBYmaIc/3AIXxovaf6sW');
             $participant -> setAdministrateur(false);
             $participant -> setCampus($faker->randomElement($campus));
             $participant -> setActif(true);
