@@ -4,7 +4,9 @@
 
 {% block body %}
 
-    <div>
+{% include 'nav/nav.html.twig' %}
+
+    <div id="presentationUser">
         <p>Date du jour : {{currentDate|date('Y-m-d')}}</p>
         <p>Participant : {#prénom et nom de l'user connecté#}</p>
     </div>
@@ -47,6 +49,8 @@
 {% endfor %}
     </table>
 
-    <a href="#">Créer une sortie</a>
+    <div class="crea_sortie_button">
+        <a href="{{path('sortie_creer')}}">Créer une sortie</a>
+    </div>
 
 {% endblock %}
