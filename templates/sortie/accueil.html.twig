@@ -4,8 +4,10 @@
 
 {% block body %}
 
-    <div>
-        <p>Date du jour : {{currentDate|date('d-m-y')}}</p>
+{% include 'nav/nav.html.twig' %}
+
+    <div id="presentationUser">
+        <p>Date du jour : {{currentDate|date('Y-m-d')}}</p>
         <p>Participant : {#prénom et nom de l'user connecté#}</p>
     </div>
 
@@ -35,8 +37,8 @@
             {% for sortie in sorties %}
             <tr>
                 <td>{{sortie.nom}}</td>
-                <td>{{sortie.dateHeureDebut|date('d-m-y')}}</td>
-                <td>{{sortie.dateLimiteInscription|date('d-m-y')}}</td>
+                <td>{{sortie.dateHeureDebut|date('Y-m-d-h-i-s')}}</td>
+                <td>{{sortie.dateLimiteInscription|date('Y-m-d-h-i-s')}}</td>
                 <td>{{sortie.nbInscriptionsMax}}</td>
                 <td></td>
                 {#if user connecté est inscrit alors, écrire une croix#}
@@ -48,6 +50,8 @@
 {% endfor %}
     </table>
 
-    <a href="#">Créer une sortie</a>
+    <div class="crea_sortie_button">
+        <a href="{{path('sortie_creer')}}">Créer une sortie</a>
+    </div>
 
 {% endblock %}
