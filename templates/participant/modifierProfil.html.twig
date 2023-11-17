@@ -1,12 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
 
-{% endblock %}
 
 {% block body %}
+
+
+
     <div>
+
+
         {{ form_start(modifierForm) }}
+
 
         {{ form_row(modifierForm.pseudo, { label: 'Pseudo:' }) }}
 
@@ -24,12 +28,16 @@
 
         {{ form_row(modifierForm.campus, { label: 'Campus:' }) }}
 
-        {{ form_row(modifierForm.photoFile, { label: 'Photo de profil:' }) }}
+        {{ form_row(modifierForm.photoProfil, { label: 'Photo de profil:' }) }}
 
         <button>Valider</button>
         <button><a href="{{ path('sortie_accueil') }}">Retour</a></button>
 
         {{ form_end(modifierForm) }}
     </div>
+{% endblock %}
+
+{% block title %}
+Modifier Profil Utilisateur | {{ parent() }}
 {% endblock %}
 

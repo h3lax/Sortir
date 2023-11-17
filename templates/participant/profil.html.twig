@@ -3,8 +3,8 @@
 {% block body %}
     <h2> Bienvenue sur votre profil {{ participant.pseudo }}</h2>
 
-    {% if user.avatar %}
-        <img src="{{ vich_uploader_asset(user, 'photoFile') }}" alt="Photo de profil" />
+    {% if participant.photoProfil %}
+        <img src="{{ asset('uploads/PhotoProfil/' ~ participant.photoProfil) }}" alt="Photo de profil" />
     {% endif %}
 
     <ul>
