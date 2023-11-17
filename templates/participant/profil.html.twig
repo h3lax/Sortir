@@ -3,7 +3,9 @@
 {% block body %}
     <h2> Bienvenue sur votre profil {{ participant.pseudo }}</h2>
 
-    {% if participant.photoProfil %}
+    {% if participant.photoProfil is same as(null) %}
+        <img src="{{ asset('uploads/PhotoProfil/photoProfulDefault-655768f80bf61.webp') }}" alt="Photo de profil" />
+    {% else %}
         <img src="{{ asset('uploads/PhotoProfil/' ~ participant.photoProfil) }}" alt="Photo de profil" />
     {% endif %}
 

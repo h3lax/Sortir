@@ -16,7 +16,6 @@ class ParticipantFixtures extends Fixture
         $campus = $campusRepository->findAll();
 
         $admin = new Participant();
-        $admin -> setPhotoProfil('photoProfulDefault-655768f80bf61.webp');
         $admin -> setNom('Michel');
         $admin -> setPrenom('Michel');
         $admin -> setTelephone($faker->phoneNumber);
@@ -30,7 +29,6 @@ class ParticipantFixtures extends Fixture
 
         for ($i=1 ; $i <= 80; $i++){
             $participant = new Participant();
-            $participant -> setPhotoProfil('photoProfulDefault-655768f80bf61.webp');
             $participant -> setNom($faker->lastName);
             $participant -> setPrenom($faker->lastName);
             $participant -> setTelephone($faker->phoneNumber);
