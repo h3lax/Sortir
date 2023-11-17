@@ -1,3 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créé une sortie{% endblock %}
+
+{% block body %}
+{% include 'nav/nav.html.twig' %}
+
 <div>
     {{ form_start(sortieForm) }}
     {{ form_widget(sortieForm) }}
@@ -5,4 +12,6 @@
     {{ form_end(sortieForm) }}
 
 </div>
+
+{% endblock %}
 

@@ -3,21 +3,23 @@
 {% block title %}{{sortie.nom}}{% endblock %}
 
 {% block body %}
-    <h2>Afficher une sortie</h2>
 
-    <div>
-            <p>Nom de la sortie : {{sortie.nom}} </p>
-            <p>Campus : {{sortie.siteOrganisateur.nom}} </p>
-            <p>Date et heure de la sortie : {{sortie.dateHeureDebut|date('d-m-y')}} </p>
-            <p>Lieu : {{sortie.lieu.nom}} </p>
-            <p>Date limite d'inscription : {{sortie.dateLimiteInscription|date('d-m-y')}} </p>
-            <p>Rue : {{sortie.lieu.rue}} </p>
-            <p>Nombre de places : {{sortie.nbInscriptionsMax}} </p>
-            <p>Code postal : {{sortie.lieu.ville.codePostal}} </p>
-            <p>Durée : </p>
-            <p>Latitude : {{sortie.lieu.latitude}} </p>
-            <p>Description et infos : {{sortie.infosSortie}} </p>
-            <p>Longitude : {{sortie.lieu.longitude}} </p>
+{% include 'nav/nav.html.twig' %}
+
+    <div class="detailsSortie">
+        <h2>Afficher une sortie</h2>
+                <p>Nom de la sortie : {{sortie.nom}} </p>
+                <p>Campus : {{sortie.siteOrganisateur.nom}} </p>
+                <p>Date et heure de la sortie : {{sortie.dateHeureDebut|date('Y-m-d-h-i-s')}} </p>
+                <p>Lieu : {{sortie.lieu.nom}} </p>
+                <p>Date limite d'inscription : {{sortie.dateLimiteInscription|date('Y-m-d-h-i-s')}} </p>
+                <p>Rue : {{sortie.lieu.rue}} </p>
+                <p>Nombre de places : {{sortie.nbInscriptionsMax}} </p>
+                <p>Code postal : {{sortie.lieu.ville.codePostal}} </p>
+                <p>Durée : {{sortie.duree}} heures </p>
+                <p>Latitude : {{sortie.lieu.latitude}} </p>
+                <p>Description et infos : {{sortie.infosSortie}} </p>
+                <p>Longitude : {{sortie.lieu.longitude}} </p>
     </div>
 
     <div>
@@ -47,6 +49,9 @@
             </tbody>
         </table>
     </div>
+
+            <li><a href="{{path('sortie_accueil')}}">Retour accueil</a></li>
+
 
 {% endblock %}
 

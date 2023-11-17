@@ -39,6 +39,7 @@ class SortiesController extends AbstractController {
         }
 
         $sorties = $sortieRepository->rechercheFiltre($donnees);
+
         $currentDate = new \DateTime();
 
         return $this->render("sortie/accueil.html.twig", [
