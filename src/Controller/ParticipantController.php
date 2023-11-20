@@ -82,7 +82,7 @@ class ParticipantController extends AbstractController
 
             $this->addFlash('success', 'Profil mis à jour avec succès.');
 
-                 return $this->redirectToRoute('participant_modifierprofil');
+                 return $this->redirectToRoute('participant_profil');
              }
         return $this->render('participant/modifierProfil.html.twig', [
             'modifierForm' => $modifierForm->createView(),
