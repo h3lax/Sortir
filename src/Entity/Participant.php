@@ -30,7 +30,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $photoProfil = 'photoProfulDefault-655768f80bf61.webp';
+    private $photoProfil ;
 
 
     /**
@@ -323,7 +323,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
 
-    public function getPhotoProfil(): string
+    public function getPhotoProfil(): ?string
     {
         return $this->photoProfil;
     }
