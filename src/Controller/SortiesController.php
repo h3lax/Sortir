@@ -2,8 +2,9 @@
 
 namespace App\Controller;
 
+use App\Data\SearchData;
 use App\Entity\Sortie;
-use App\Form\FiltreSortiesType;
+use App\Form\SearchSortiesType;
 use App\Form\SortieType;
 use App\Repository\EtatRepository;
 use App\Repository\ParticipantRepository;
@@ -28,20 +29,15 @@ class SortiesController extends AbstractController {
         SortieRepository $sortieRepository,
         Request $request
     ):Response {
-        //initialisation recherche
-        $filtreSortiesForm = $this -> createForm(FiltreSortiesType::class);
-        $filtreSortiesForm -> handleRequest($request);
-        //initialisation du tableau de conditions pour constituer la requete
-        $donnees = [];
-        //Si on lance un filtre avec le bouton on transmet les données dans le tableau
-        if ($filtreSortiesForm->isSubmitted() && $filtreSortiesForm->isValid()) {
-            $donnees = $filtreSortiesForm->getData();
+        $donnees = new SearchData();
+        $filtreSortiesForm = $this -> createForm(SearchSortiesType::class, $donnees);
+        if (empty($donnees->campus)) {
+            $donnees->campus = $this->getUser()->getCampus();
         }
-
+        $filtreSortiesForm -> handleRequest($request);
         $sorties = $sortieRepository->rechercheFiltre($donnees);
 
         $currentDate = new \DateTime();
-
         return $this->render("sortie/accueil.html.twig", [
             "sorties" => $sorties, 
             "currentDate" => $currentDate,
@@ -80,13 +76,12 @@ class SortiesController extends AbstractController {
         $sortieForm = $this ->createForm(SortieType::class, $sortie);
 
         //Juste pour que ça marche, à virer apres
-        $etats = $etatRepository->findBy(['libelle' => 'Ouvert']);
+        $etats = $etatRepository->findBy(['libelle' => 'Ouverte']);
         $etat = $etats[0];
         if($etat){
             $sortie -> setEtat($etat);
         }
-        $organisateur = $participantRepository->findBy(['id' => 1]);
-        $sortie -> setOrganisateur($organisateur[0]);
+        $sortie -> setOrganisateur($this->getUser());
 
 
         $sortieForm -> handleRequest($request);

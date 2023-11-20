@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
-
+use App\Entity\Participant;
+use App\Entity\Sortie;
 use App\Form\ModifierProfilType;
+use App\Repository\ParticipantRepository;
+use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -23,11 +26,7 @@ class ParticipantController extends AbstractController
      */
     public function profil(): Response
     {
-
-
         $participant = $this->getUser();
-
-
 
         if (!$participant){
             throw $this->createNotFoundException('Oups... Nous ne parvenons pas à retrouver cet utilisateur.');
@@ -95,9 +94,76 @@ class ParticipantController extends AbstractController
         return $this->render('participant/modifierProfil.html.twig', [
             'modifierForm' => $modifierForm->createView(),
         ]);
+        }
+
+        //S'inscrire à une sortie
+
+        /**
+         * @Route("/inscription/{id}", name="inscription_sortie")
+         */
+        public function inscriptionSortie(int $id, ParticipantRepository $participantRepository, SortieRepository $sortieRepository, Request $request,  EntityManagerInterface $entityManager ): Response {
+
+            $sortie = $sortieRepository->find($id);
+
+            if(!$sortie) {
+                throw $this->createNotFoundException('Sortie inexistante !');
+            }
+            else {
+
+                $participant = $this->getUser();
+
+                //Test si sortie n'est pas passée
+
+                if ($sortie->estInscrit($participant)) {
+                    $this->addFlash('warning', 'Vous êtes déjà inscrit à cette sortie.');
+                }
+                else {
+                    $sortie->addParticipant($participant);
+                }
+
+                // Enregistrez les modifications dans la base de données
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Inscription réussie à la sortie !');
+
+                return $this->redirectToRoute('sortie_accueil');
+            }
 
         }
 
+        //Se désister d'une sortie
+
+        /**
+         * @Route("/desistement/{id}", name="desistement_sortie")
+         */
+        public function desistementSortie(int $id, ParticipantRepository $participantRepository, SortieRepository $sortieRepository, Request $request,  EntityManagerInterface $entityManager ): Response {
+
+            $sortie = $sortieRepository->find($id);
+
+            if(!$sortie) {
+                throw $this->createNotFoundException('Sortie inexistante !');
+            }
+            else {
+                $participant = $this->getUser();
+
+            //Test si sortie n'est pas passée
+
+                if ($sortie->estInscrit($participant)) {
+                    $sortie->removeParticipant($participant);
+                }
+                else {
+                    $this->addFlash('warning', 'Impossible de se désister : vous ne faites pas partie de cette sortie !');
+                }
+
+                // Enregistrez les modifications dans la base de données
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Votre inscripton a bien été annulée !');
+
+                return $this->redirectToRoute('sortie_accueil');
+            }
+
+        }
 
     }
 

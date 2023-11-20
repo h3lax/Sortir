@@ -234,5 +234,16 @@ class Sortie
 
         return $this;
     }
+     /**
+     * Vérifie si un participant est déjà inscrit à cette sortie.
+     *
+     * @param Participant $participant
+     *
+     * @return bool
+     */
+    public function estInscrit(Participant $participant): bool
+    {
+        return $this->participants->contains($participant);
+    }
 
 }
