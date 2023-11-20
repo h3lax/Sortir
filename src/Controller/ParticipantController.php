@@ -62,7 +62,7 @@ class ParticipantController extends AbstractController
                         $newFilename
                     );
                 } catch (FileException $e) {
-                    // ... Si probleme... todo
+                    // ... Si probleme...
                 }
 
                 // updates the 'brochureFilename' property to store the PDF file name
