@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Data\SearchData;
 use App\Entity\Sortie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -41,60 +42,55 @@ class SortieRepository extends ServiceEntityRepository
         }
     }
 
-    public function rechercheFiltre($donnees){
-        if (!empty($donnees)){
-            $queryBuilder = $this
-                ->createQueryBuilder('s')
-                ->select('e', 's')
-                ->join('s.etat', 'e')
-                ->leftJoin('s.participants', 'p');
+    public function rechercheFiltre(SearchData $donnees){
+        $queryBuilder = $this
+            ->createQueryBuilder('s')
+            ->select('e', 's', 'p')
+            ->join('s.etat', 'e')
+            ->leftJoin('s.participants', 'p');
 
-            if ($donnees['campus']) {
-                $queryBuilder = $queryBuilder
-                    ->andWhere('s.siteOrganisateur = :campus')
-                    ->setParameter('campus', $donnees['campus']->getId());
-            }
-            if ($donnees['nom']) {
-                $nom = $donnees['nom'];
-                $queryBuilder = $queryBuilder
-                    ->andWhere('s.nom LIKE :nom')
-                    ->setParameter('nom', "%$nom%");
-            }
-            if ($donnees['debut_periode']) {
-                $queryBuilder = $queryBuilder
-                    ->andWhere('s.dateHeureDebut > :start')
-                    ->setParameter('start', $donnees['debut_periode']->format('Y-m-d'));
-            }
-            if ($donnees['fin_periode']) {
-                $queryBuilder = $queryBuilder
-                    ->andWhere('s.dateHeureDebut < :end')
-                    ->setParameter('end', $donnees['fin_periode']->format('Y-m-d'));
-            }
-            if ($donnees['organisateur']) {
-                $queryBuilder = $queryBuilder
-                    ->andWhere('s.organisateur = :org')
-                    ->setParameter('org', $this->security->getUser()->getId());
-            }
-            if ($donnees['inscrit']) {
-                $queryBuilder = $queryBuilder
-                    ->andWhere(':insc MEMBER OF s.participants')
-                    ->setParameter('insc', $this->security->getUser()->getId());
-            }
-            if ($donnees['pasInscrit']) {
-                $queryBuilder = $queryBuilder
-                    ->andWhere(':notInsc NOT MEMBER OF s.participants')
-                    ->setParameter('notInsc', $this->security->getUser()->getId());
-            }
-            if ($donnees['past']) {
-                $queryBuilder = $queryBuilder
-                    ->andWhere('e.id = :past')
-                    ->setParameter('past', '3');
-            }
+        $queryBuilder
+            ->andWhere('s.siteOrganisateur = :campus')
+            ->setParameter('campus', $donnees->campus);
 
-            return $queryBuilder->getQuery()->getResult();
-        }else{
-           return $this->findAll();
+        if (!empty($donnees->recherche)) {
+            $queryBuilder
+                ->andWhere('s.nom LIKE :nom')
+                ->setParameter('nom', "%$donnees->recherche%");
         }
+        if (!empty($donnees->debutPeriode)) {
+            $queryBuilder
+                ->andWhere('s.dateHeureDebut > :start')
+                ->setParameter('start', $donnees->debutPeriode->format('Y-m-d'));
+        }
+        if (!empty($donnees->finPeriode)) {
+            $queryBuilder
+                ->andWhere('s.dateHeureDebut < :end')
+                ->setParameter('end', $donnees->finPeriode->format('Y-m-d'));
+        }
+        if ($donnees->organisateur) {
+            $queryBuilder
+                ->andWhere('s.organisateur = :org')
+                ->setParameter('org', $this->security->getUser()->getId());
+        }
+        if ($donnees->inscrit) {
+            $queryBuilder
+                ->andWhere(':insc MEMBER OF s.participants')
+                ->setParameter('insc', $this->security->getUser()->getId());
+        }
+        if ($donnees->pasInscrit) {
+            $queryBuilder
+                ->andWhere(':notInsc NOT MEMBER OF s.participants')
+                ->setParameter('notInsc', $this->security->getUser()->getId());
+        }
+        if ($donnees->past) {
+            $queryBuilder
+                ->andWhere('e.id = :past')
+                ->setParameter('past', '3');
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+
     }
 
 //    /**
