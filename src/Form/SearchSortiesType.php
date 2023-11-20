@@ -11,18 +11,22 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Security;
 
 class SearchSortiesType extends AbstractType
 {
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
                 'choice_label' => 'nom',
-                'attr'=> [
-                    'placeholder' => 'campus'
-                    ]
+                'data'=> $this->security->getUser()->getCampus()
                 ])
             ->add('recherche', TextType::class,[
                 'label'=>'Le nom de la sortie contient',

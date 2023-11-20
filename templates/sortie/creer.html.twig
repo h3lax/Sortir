@@ -5,13 +5,60 @@
 {% block body %}
 {% include 'nav/nav.html.twig' %}
 
-<div>
-    {{ form_start(sortieForm) }}
-    {{ form_widget(sortieForm) }}
-    <button>Create</button>
-    {{ form_end(sortieForm) }}
+    <div>
+        {{ form_start(sortieForm) }}
+        {{ form_widget(sortieForm) }}
+        <button>Create</button>
+        {{ form_end(sortieForm) }}
 
-</div>
+        <script>
+            document.getElementById('sortie_ville').addEventListener('change', function() {
+                var selectedVilleId = this.value;
+
+                // Récupération des lieux de la ville en AJAX
+                fetch('../api/lieux/' + selectedVilleId)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Injection des données dans le menu déroulant
+                        var lieuxSelect = document.getElementById('sortie_lieu');
+                        lieuxSelect.innerHTML = '';
+
+                        data.forEach(function(lieu) {
+                            var option = document.createElement('option');
+                            option.value = lieu.id;
+                            option.text = lieu.nom;
+                            lieuxSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Erreur lors de la récupération des lieux :', error);
+                    });
+            });
+
+            document.getElementById('sortie_lieu').addEventListener('change', function (){
+                var selectedLieuId = this.value;
+
+                fetch('../api/coordonnees/'+ selectedLieuId)
+                    .then(response => response.json())
+                    .then(data => {
+
+                        var lattitudeSelect = document.getElementById('sortie_latitude');
+                        var longitudeSelect = document.getElementById('sortie_longitude');
+                        lattitudeSelect.value = data.latitude;
+                        longitudeSelect.value = data.longitude;
+                    })
+                    .catch(error => {
+                        console.error('Erreur lors de la récupération des coordonées :', error);
+                    });
+            });
+
+
+        </script>
+
+    </div>
+
 
 {% endblock %}
+
+
 

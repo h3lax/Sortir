@@ -16,9 +16,14 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Security;
 
 class SortieType extends AbstractType
 {
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -40,6 +45,7 @@ class SortieType extends AbstractType
                 'label' => 'Campus',
                 'class' => Campus::class,
                 'choice_label' => 'nom',
+                'data'=> $this->security->getUser()->getCampus()
                 ])
             ->add('ville', EntityType::class,[
                 'mapped'=> false,
@@ -55,6 +61,9 @@ class SortieType extends AbstractType
             ->add('latitude', NumberType::class, ['mapped'=> false])
             ->add('longitude', NumberType::class, ['mapped'=> false])
         ;
+
+
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void
