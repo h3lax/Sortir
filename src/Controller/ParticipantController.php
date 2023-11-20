@@ -38,9 +38,11 @@ class ParticipantController extends AbstractController
     /**
      * @Route("/participant/modifierprofil", name="participant_modifierprofil")
      */
-    public function modifierProfil(Request $request, UserPasswordHasherInterface $mdpHasher, SluggerInterface $slugger): Response
+    public function modifierProfil(Request $request, UserPasswordHasherInterface $mdpHasher, SluggerInterface $slugger, EntityManagerInterface $entityManager): Response
     {
-        $modifierForm = $this->createForm(ModifierProfilType::class, $this->getUser());
+
+        $participant=$this->getUser();
+        $modifierForm = $this->createForm(ModifierProfilType::class, $participant);
         $modifierForm->handleRequest($request);
 
         if ($modifierForm->isSubmitted() && $modifierForm->isValid()) {
@@ -65,7 +67,7 @@ class ParticipantController extends AbstractController
                         $newFilename
                     );
                 } catch (FileException $e) {
-                    // ... Si probleme... todo
+                    // ... Si probleme...
                 }
 
                 // updates the 'brochureFilename' property to store the PDF file name
@@ -79,14 +81,16 @@ class ParticipantController extends AbstractController
                 $mdpHasher->hashPassword( $participant, $motPasse ) );
             }
 
-            $entityManager = $this->getDoctrine()->getManager();
+
             $entityManager ->persist($participant);
             $entityManager->flush();
 
             $this->addFlash('success', 'Profil mis à jour avec succès.');
 
-                 return $this->redirectToRoute('participant_modifierprofil');
-             }
+                 return $this->redirectToRoute('participant_profil');
+        }
+
+        $entityManager -> refresh($participant);
         return $this->render('participant/modifierProfil.html.twig', [
             'modifierForm' => $modifierForm->createView(),
         ]);
@@ -109,22 +113,22 @@ class ParticipantController extends AbstractController
                 $participant = $this->getUser();
 
                 //Test si sortie n'est pas passée
-    
+
                 if ($sortie->estInscrit($participant)) {
                     $this->addFlash('warning', 'Vous êtes déjà inscrit à cette sortie.');
                 }
                 else {
                     $sortie->addParticipant($participant);
                 }
-    
+
                 // Enregistrez les modifications dans la base de données
                 $entityManager->flush();
-    
+
                 $this->addFlash('success', 'Inscription réussie à la sortie !');
-    
+
                 return $this->redirectToRoute('sortie_accueil');
             }
-           
+
         }
 
         //Se désister d'une sortie
@@ -133,10 +137,10 @@ class ParticipantController extends AbstractController
          * @Route("/desistement/{id}", name="desistement_sortie")
          */
         public function desistementSortie(int $id, ParticipantRepository $participantRepository, SortieRepository $sortieRepository, Request $request,  EntityManagerInterface $entityManager ): Response {
-            
+
             $sortie = $sortieRepository->find($id);
-            
-            if(!$sortie) { 
+
+            if(!$sortie) {
                 throw $this->createNotFoundException('Sortie inexistante !');
             }
             else {
@@ -158,7 +162,7 @@ class ParticipantController extends AbstractController
 
                 return $this->redirectToRoute('sortie_accueil');
             }
-            
+
         }
 
     }

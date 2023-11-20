@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Entity\Participant;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,6 +31,7 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
 
     public function authenticate(Request $request): Passport
     {
+
         $mail = $request->request->get('mail', '');
 
         $request->getSession()->set(Security::LAST_USERNAME, $mail);
@@ -49,7 +51,7 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        // For example:
+
         return new RedirectResponse($this->urlGenerator->generate('sortie_accueil'));
 
     }
