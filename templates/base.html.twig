@@ -17,6 +17,9 @@
     <body>
         
         {% block body %}
+            {% block flash %} Code d'affichage du flash {% endblock %}
+        {% endblock %}
+         {% block main %}
             {% for label, messages in app.flashes %}
             {% for message in messages %}
             <div class="flash flash-{{ label }}">

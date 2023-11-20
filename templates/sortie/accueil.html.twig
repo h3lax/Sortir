@@ -44,7 +44,11 @@
                 {#if user connecté est inscrit alors, écrire une croix#}
                 <td>a</td>
                 <td></td>
-                <td><a href="{{path('sortie_detail', {'id': sortie.id})}}">Afficher</a></td>
+                <td>
+                    <a href="{{path('sortie_detail', {'id': sortie.id})}}">Afficher</a>
+                    <a href="{{path('inscription_sortie', {'id': sortie.id})}}">S'inscrire</a>
+                    <a href="{{path('desistement_sortie', {'id': sortie.id})}}">Se désister</a>
+                </td>
             </tr>
         </tbody>
 {% endfor %}

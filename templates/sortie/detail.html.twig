@@ -20,12 +20,13 @@
                 <p>Latitude : {{sortie.lieu.latitude}} </p>
                 <p>Description et infos : {{sortie.infosSortie}} </p>
                 <p>Longitude : {{sortie.lieu.longitude}} </p>
+                <button>S'inscrire</button>
     </div>
 
     <div>
         <h4>Liste des participants inscrits : </h4>
         
-        {#Faire une boucle pour parcourir le tableau des participants#}
+        {% for participant in sortie.participants %}
         <table border="1">
             <thead>
                 <tr>
@@ -35,19 +36,12 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>Exemple 1</td>
-                    <td>Exemple 1</td>
-                </tr>
-                <tr>
-                    <td>Exemple 2</td>
-                    <td>Exemple 2</td>
-                </tr>
-                <tr>
-                    <td>Exemple 3</td>
-                    <td>Exemple 3</td>
+                    <td>{{participant.pseudo}}</td>
+                    <td>{{participant.prenom}} {{participant.nom|upper}}</td>
                 </tr>
             </tbody>
         </table>
+        {% endfor %}
     </div>
 
             <li><a href="{{path('sortie_accueil')}}">Retour accueil</a></li>

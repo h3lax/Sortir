@@ -1,6 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+
+{% include 'nav/nav.html.twig' %}
+
     <h2> Bienvenue sur votre profil {{ participant.pseudo }}</h2>
 
     {% if participant.photoProfil is same as(null) %}
@@ -18,6 +21,7 @@
     </ul>
 
     <button type="submit"><a href="{{ path('sortie_accueil') }}">Retour</a></button>
+    <button><a href="{{ path('participant_modifierprofil') }}">Modifier</a></button>
 
 
 
