@@ -5,13 +5,13 @@
 {% block body %}
 
 {% include 'nav/nav.html.twig' %}
-
+<div class="accueil">
     <div id="presentationUser">
-        <p>Date du jour : {{currentDate|date('Y-m-d')}}</p>
+        <p>Date du jour : {{currentDate|date('j F Y')}}</p>
         <p>Participant : </p>
     </div>
 
-    <div>
+    <div class="filtreSorties">
         <h4>Filtrer les sorties</h4>
         {{ form_start(filtreSortiesForm) }}
         {{ form_widget(filtreSortiesForm) }}
@@ -20,7 +20,7 @@
 
     </div>
 
-    <table border="1">
+    <table border="1" class="affichageSorties">
         <thead>
             <tr>
                 <th>Nom de la sortie</th>
@@ -67,7 +67,8 @@
     </table>
 
     <div class="crea_sortie_button">
-        <a href="{{path('sortie_creer')}}">Créer une sortie</a>
+        <a href="{{path('sortie_creer')}}"><button>Créer une nouvelle sortie</button></a>
     </div>
+</div>
 
 {% endblock %}
