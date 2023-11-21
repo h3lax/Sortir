@@ -9,6 +9,7 @@ use App\Form\SortieType;
 use App\Repository\EtatRepository;
 use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
+use App\Security\ActifChecker;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,14 +29,19 @@ class SortiesController extends AbstractController
      */
     public function accueil(
         SortieRepository $sortieRepository,
-        Request          $request
+        Request          $request,
+        ActifChecker $checker
     ): Response
     {
+
+        $participant=$this->getUser();
+        $checker->checkPostAuth($participant);
+
         $donnees = new SearchData();
-        $filtreSortiesForm = $this->createForm(SearchSortiesType::class, $donnees);
         if (empty($donnees->campus)) {
             $donnees->campus = $this->getUser()->getCampus();
         }
+        $filtreSortiesForm = $this->createForm(SearchSortiesType::class, $donnees);
         $filtreSortiesForm->handleRequest($request);
         $sorties = $sortieRepository->rechercheFiltre($donnees);
 
@@ -52,8 +58,11 @@ class SortiesController extends AbstractController
     /**
      * @ROUTE("/detail/{id}", name="detail")
      */
-    public function detail(int $id, SortieRepository $sortieRepository): Response
+    public function detail(int $id, SortieRepository $sortieRepository, ActifChecker $checker): Response
     {
+
+        $participant=$this->getUser();
+        $checker->checkPostAuth($participant);
 
         $sortie = $sortieRepository->find($id);
 
@@ -72,9 +81,16 @@ class SortiesController extends AbstractController
         Request                $request,
         EntityManagerInterface $entityManager,
         EtatRepository         $etatRepository,
-        ParticipantRepository  $participantRepository
+        ParticipantRepository  $participantRepository,
+        ActifChecker $checker
+
+        
+
     ): Response
     {
+        $participant=$this->getUser();
+        $checker->checkPostAuth($participant);
+
         $sortie = new Sortie();
         $sortieForm = $this->createForm(SortieType::class, $sortie);
 
@@ -107,7 +123,28 @@ class SortiesController extends AbstractController
         }
 
         return $this->render('sortie/creer.html.twig', ['sortieForm' => $sortieForm->createView()]);
-        }
+    }
+
+    /**
+     * @Route("/modifier/{id}", name="modifier")
+     */
+    public function modifier(
+        Request                $request,
+        EntityManagerInterface $entityManager,
+        EtatRepository         $etatRepository,
+        SortieRepository       $sortieRepository,
+        $id
+    ): Response{
+
+        $sortie = $sortieRepository->find($id);
+        $sortieForm = $this->createForm(SortieType::class, $sortie);
+
+        $sortie->setOrganisateur($this->getUser());
+        $sortieForm->handleRequest($request);
+
+
+        return $this->render('sortie/modifier.html.twig', ['sortieForm' => $sortieForm->createView(), 'sortie'=>$sortie]);
+    }
 
 
 }
