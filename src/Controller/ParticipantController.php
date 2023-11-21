@@ -7,6 +7,7 @@ use App\Entity\Sortie;
 use App\Form\ModifierProfilType;
 use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
+use App\Security\ActifChecker;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -24,9 +25,10 @@ class ParticipantController extends AbstractController
     /**
      * @Route("/participant/profil", name="participant_profil")
      */
-    public function profil(): Response
+    public function profil(ActifChecker $checker): Response
     {
         $participant = $this->getUser();
+        $checker->checkPostAuth($participant);
 
         if (!$participant){
             throw $this->createNotFoundException('Oups... Nous ne parvenons pas à retrouver cet utilisateur.');
@@ -38,8 +40,11 @@ class ParticipantController extends AbstractController
     /**
      * @Route("/participant/modifierprofil", name="participant_modifierprofil")
      */
-    public function modifierProfil(Request $request, UserPasswordHasherInterface $mdpHasher, SluggerInterface $slugger, EntityManagerInterface $entityManager): Response
+    public function modifierProfil(Request $request, UserPasswordHasherInterface $mdpHasher, SluggerInterface $slugger, EntityManagerInterface $entityManager, ActifChecker $checker): Response
     {
+
+        $participant=$this->getUser();
+        $checker->checkPostAuth($participant);
 
         $participant=$this->getUser();
         $modifierForm = $this->createForm(ModifierProfilType::class, $participant);
