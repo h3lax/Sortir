@@ -90,6 +90,8 @@ class SortiesController extends AbstractController
                 }
                 $entityManager->persist($sortie);
                 $entityManager->flush();
+                $this -> addFlash('success','Sortie créée! N\'oubliez pas que vous devrez la publier pour la rendre accessible à d\'autres participants!');
+                return $this->redirectToRoute('sortie_accueil');
 
             } elseif ($sortieForm->getClickedButton() && $sortieForm->getClickedButton()->getName() === 'push') {
                 $etat = $etatRepository->findOneBy(['libelle' => 'Ouverte']);
@@ -98,6 +100,8 @@ class SortiesController extends AbstractController
                 }
                 $entityManager->persist($sortie);
                 $entityManager->flush();
+                $this -> addFlash('success','Sortie publiée!');
+                return $this->redirectToRoute('sortie_accueil');
             }
 
         }
