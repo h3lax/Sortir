@@ -85,8 +85,12 @@ class SortieRepository extends ServiceEntityRepository
         }
         if ($donnees->past) {
             $queryBuilder
-                ->andWhere('e.id = :past')
-                ->setParameter('past', '3');
+                ->andWhere('e.libelle = :past')
+                ->setParameter('past', 'Passée');
+        }else{
+            $queryBuilder
+                ->andWhere('e.libelle != :past')
+                ->setParameter('past', 'Passée');
         }
 
         return $queryBuilder->getQuery()->getResult();
