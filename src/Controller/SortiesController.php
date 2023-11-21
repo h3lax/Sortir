@@ -83,6 +83,9 @@ class SortiesController extends AbstractController
         EtatRepository         $etatRepository,
         ParticipantRepository  $participantRepository,
         ActifChecker $checker
+
+        
+
     ): Response
     {
         $participant=$this->getUser();
@@ -120,7 +123,28 @@ class SortiesController extends AbstractController
         }
 
         return $this->render('sortie/creer.html.twig', ['sortieForm' => $sortieForm->createView()]);
-        }
+    }
+
+    /**
+     * @Route("/modifier/{id}", name="modifier")
+     */
+    public function modifier(
+        Request                $request,
+        EntityManagerInterface $entityManager,
+        EtatRepository         $etatRepository,
+        SortieRepository       $sortieRepository,
+        $id
+    ): Response{
+
+        $sortie = $sortieRepository->find($id);
+        $sortieForm = $this->createForm(SortieType::class, $sortie);
+
+        $sortie->setOrganisateur($this->getUser());
+        $sortieForm->handleRequest($request);
+
+
+        return $this->render('sortie/modifier.html.twig', ['sortieForm' => $sortieForm->createView(), 'sortie'=>$sortie]);
+    }
 
 
 }
