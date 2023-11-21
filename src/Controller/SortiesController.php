@@ -18,7 +18,8 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/sortie", name="sortie_")
  */
-class SortiesController extends AbstractController {
+class SortiesController extends AbstractController
+{
 
     //Accueil : affichage de toutes les sorties existantes, sans aucun filtre pour l'instant
 
@@ -27,19 +28,20 @@ class SortiesController extends AbstractController {
      */
     public function accueil(
         SortieRepository $sortieRepository,
-        Request $request
-    ):Response {
+        Request          $request
+    ): Response
+    {
         $donnees = new SearchData();
-        $filtreSortiesForm = $this -> createForm(SearchSortiesType::class, $donnees);
+        $filtreSortiesForm = $this->createForm(SearchSortiesType::class, $donnees);
         if (empty($donnees->campus)) {
             $donnees->campus = $this->getUser()->getCampus();
         }
-        $filtreSortiesForm -> handleRequest($request);
+        $filtreSortiesForm->handleRequest($request);
         $sorties = $sortieRepository->rechercheFiltre($donnees);
 
         $currentDate = new \DateTime();
         return $this->render("sortie/accueil.html.twig", [
-            "sorties" => $sorties, 
+            "sorties" => $sorties,
             "currentDate" => $currentDate,
             "filtreSortiesForm" => $filtreSortiesForm->createView()
         ]);
@@ -50,15 +52,16 @@ class SortiesController extends AbstractController {
     /**
      * @ROUTE("/detail/{id}", name="detail")
      */
-    public function detail(int $id, SortieRepository $sortieRepository):Response {
+    public function detail(int $id, SortieRepository $sortieRepository): Response
+    {
 
         $sortie = $sortieRepository->find($id);
-    
+
         return $this->render("sortie/detail.html.twig", [
-            "sortie" => $sortie
-        ]
-    
-    );
+                "sortie" => $sortie
+            ]
+
+        );
     }
 
 
@@ -66,35 +69,41 @@ class SortiesController extends AbstractController {
      * @Route("/creer", name="creer")
      */
     public function creer(
-        Request $request,
+        Request                $request,
         EntityManagerInterface $entityManager,
-        EtatRepository $etatRepository,
+        EtatRepository         $etatRepository,
         ParticipantRepository  $participantRepository
     ): Response
     {
         $sortie = new Sortie();
-        $sortieForm = $this ->createForm(SortieType::class, $sortie);
+        $sortieForm = $this->createForm(SortieType::class, $sortie);
 
-        //Juste pour que ça marche, à virer apres
-        $etats = $etatRepository->findBy(['libelle' => 'Ouverte']);
-        $etat = $etats[0];
-        if($etat){
-            $sortie -> setEtat($etat);
+        $sortie->setOrganisateur($this->getUser());
+        $sortieForm->handleRequest($request);
+
+        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+
+            if ($sortieForm->getClickedButton() && $sortieForm->getClickedButton()->getName() === 'save') {
+                $etat = $etatRepository->findOneBy(['libelle' => 'Créée']);
+                if ($etat) {
+                    $sortie->setEtat($etat);
+                }
+                $entityManager->persist($sortie);
+                $entityManager->flush();
+
+            } elseif ($sortieForm->getClickedButton() && $sortieForm->getClickedButton()->getName() === 'push') {
+                $etat = $etatRepository->findOneBy(['libelle' => 'Ouverte']);
+                if ($etat) {
+                    $sortie->setEtat($etat);
+                }
+                $entityManager->persist($sortie);
+                $entityManager->flush();
+            }
+
         }
-        $sortie -> setOrganisateur($this->getUser());
-
-
-        $sortieForm -> handleRequest($request);
-
-        if ($sortieForm -> isSubmitted() && $sortieForm ->isValid()){
-            $entityManager -> persist($sortie);
-            $entityManager ->flush();
-
-        }
-
-
 
         return $this->render('sortie/creer.html.twig', ['sortieForm' => $sortieForm->createView()]);
-    }
+        }
+
 
 }

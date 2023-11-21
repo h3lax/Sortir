@@ -8,8 +8,8 @@
     <div>
         {{ form_start(sortieForm) }}
         {{ form_widget(sortieForm) }}
-        <button>Create</button>
         {{ form_end(sortieForm) }}
+        <a href="{{ path('sortie_accueil') }}">Annuler</a>
 
         <script>
             document.getElementById('sortie_ville').addEventListener('change', function() {

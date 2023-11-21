@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -88,9 +89,15 @@ class SortieType extends AbstractType
                     'style'=> 'display:none;'
                 ],
                 ])
+            ->add('save', SubmitType::class, [
+                'label'=> 'Enregistrer'
+            ])
+            ->add('push', SubmitType::class, [
+                'label'=> 'Publier'
+            ])
         ;
 
-
+    //TODO : Préremplir par défaut les champs lieu et lat/long en fonction de la ville présélectionnée, pareil pour lat/long avec le lieu préselect. Si ce sont ceux que l'utilisateur veut utiliser il ne va pas les changer et la page ne fonctionnera pas en l'état
 
     }
 
