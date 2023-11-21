@@ -112,30 +112,50 @@ class ParticipantController extends AbstractController
 
             $sortie = $sortieRepository->find($id);
 
+            $participant = $this->getUser();
+
+            $currentDate = new \DateTime();
+
+            //Savoir si la sortie existe bien
+
             if(!$sortie) {
                 throw $this->createNotFoundException('Sortie inexistante !');
-            }
-            else {
-
-                //Test si sortie n'est pas passée
-
-                if ($sortie->estInscrit($participant)) {
-                    $this->addFlash('warning', 'Vous êtes déjà inscrit à cette sortie.');
-                }
-                else {
-                    $sortie->addParticipant($participant);
-                }
-
-                // Enregistrez les modifications dans la base de données
-                $entityManager->flush();
-
-                $this->addFlash('success', 'Inscription réussie à la sortie !');
-
                 return $this->redirectToRoute('sortie_accueil');
             }
 
-        }
+            //Savoir si la date de clôture n'a pas été dépassée
 
+            elseif($sortie->getDateLimiteInscription() < $currentDate) {
+                $this->addFlash('warning', 'Inscriptions clôturées pour cette sortie !');
+                return $this->redirectToRoute('sortie_accueil');
+            }
+
+            //Savoir si le nombre max de participants à la sortie a été atteint
+
+            elseif (count($sortie->getParticipants()) >= $sortie->getNbInscriptionsMax()) {
+                $this->addFlash('warning', 'Nombre de participants max atteint pour cette sortie, désolés !');
+                return $this->redirectToRoute('sortie_accueil');
+            }
+
+            //Savoir si la personne est déjà inscrite ou pas
+
+            elseif ($sortie->estInscrit($participant)) {
+                $this->addFlash('warning', 'Vous êtes déjà inscrit à cette sortie !');
+                return $this->redirectToRoute('sortie_accueil');
+            }
+            
+            else {
+                $sortie->addParticipant($participant);
+                 // Enregistrez les modifications dans la base de données
+                 $entityManager->flush();
+    
+                $this->addFlash('success', 'Vous êtes maintenant inscrit à cette sortie !');
+            }
+
+            return $this->redirectToRoute('sortie_accueil');
+
+        }
+    
         //Se désister d'une sortie
 
         /**
@@ -148,30 +168,44 @@ class ParticipantController extends AbstractController
 
             $sortie = $sortieRepository->find($id);
 
+            $participant = $this->getUser();
+
+            $currentDate = new \DateTime();
+
+            //Savoir si la sortie existe
+
             if(!$sortie) {
                 throw $this->createNotFoundException('Sortie inexistante !');
+                return $this->redirectToRoute('sortie_accueil');
             }
+
+            //Savoir si le participant est bien inscrit à la sortie
+
+            elseif(!$sortie->estInscrit($participant)) {
+                $this->addFlash('warning', 'Impossible de se désister : vous ne faites pas partie de cette sortie !');
+                return $this->redirectToRoute('sortie_accueil');
+            }
+
+            //Savoir si la sortie n'a pas déjà commencé / n'est pas déjà terminée
+
+            elseif($sortie->getDateHeureDebut() < $currentDate) {
+                $this->addFlash('warning', 'La sortie a commencé ou est terminée, vous ne pouvez plus vous désinscrire !');
+                return $this->redirectToRoute('sortie_accueil');
+            }
+
             else {
-
-            //Test si sortie n'est pas passée
-
-                if ($sortie->estInscrit($participant)) {
-                    $sortie->removeParticipant($participant);
-                }
-                else {
-                    $this->addFlash('warning', 'Impossible de se désister : vous ne faites pas partie de cette sortie !');
-                }
-
+                $sortie->removeParticipant($participant);
                 // Enregistrez les modifications dans la base de données
                 $entityManager->flush();
 
                 $this->addFlash('success', 'Votre inscripton a bien été annulée !');
+            }
 
                 return $this->redirectToRoute('sortie_accueil');
             }
 
         }
 
-    }
+    
 
 

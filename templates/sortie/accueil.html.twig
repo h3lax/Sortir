@@ -5,13 +5,13 @@
 {% block body %}
 
 {% include 'nav/nav.html.twig' %}
-
+<div class="accueil">
     <div id="presentationUser">
-        <p>Date du jour : {{currentDate|date('Y-m-d')}}</p>
-        <p>Participant : {#prénom et nom de l'user connecté#}</p>
+        <p>Date du jour : {{currentDate|date('j F Y')}}</p>
+        <p>Participant : </p>
     </div>
 
-    <div>
+    <div class="filtreSorties">
         <h4>Filtrer les sorties</h4>
         {{ form_start(filtreSortiesForm) }}
         {{ form_widget(filtreSortiesForm) }}
@@ -20,12 +20,12 @@
 
     </div>
 
-    <table border="1">
+    <table border="1" class="affichageSorties">
         <thead>
             <tr>
                 <th>Nom de la sortie</th>
                 <th>Date de la sortie</th>
-                <th>Clôture</th>
+                <th>Clôture des inscriptions</th>
                 <th>Inscrits / places</th>
                 <th>Etat</th>
                 <th>Inscrit</th>
@@ -37,17 +37,29 @@
             {% for sortie in sorties %}
             <tr>
                 <td>{{sortie.nom}}</td>
-                <td>{{sortie.dateHeureDebut|date('Y-m-d-h-i-s')}}</td>
-                <td>{{sortie.dateLimiteInscription|date('Y-m-d-h-i-s')}}</td>
-                <td>{{sortie.nbInscriptionsMax}}</td>
-                <td></td>
-                {#if user connecté est inscrit alors, écrire une croix#}
-                <td>a</td>
+                <td>{{sortie.dateHeureDebut|date('j F Y, H:i')}}</td>
+                <td>{{sortie.dateLimiteInscription|date('j F Y')}}</td>
+                <td>{{sortie.participants|length}} / {{sortie.nbInscriptionsMax}}</td>
                 <td></td>
                 <td>
+                    {% if app.user in sortie.participants %}  
+                        x
+                    {% endif %}
+                </td>
+                <td>{{sortie.organisateur.prenom}} {{sortie.organisateur.nom|upper}}</td>
+                <td>
                     <a href="{{path('sortie_detail', {'id': sortie.id})}}">Afficher</a>
-                    <a href="{{path('inscription_sortie', {'id': sortie.id})}}">S'inscrire</a>
-                    <a href="{{path('desistement_sortie', {'id': sortie.id})}}">Se désister</a>
+                    {% if app.user not in sortie.participants %}
+                        <a href="{{path('inscription_sortie', {'id': sortie.id})}}">S'inscrire</a>
+                    {% endif %}
+                    {% if app.user in sortie.participants %}
+                        <a href="{{path('desistement_sortie', {'id': sortie.id})}}">Se désister</a>
+                    {% endif %}
+                    {% if app.user in sortie.organisateur %}
+                        <a href="#">Modifier</a>
+                    {% endif %}
+                    <a href="#">Publier</a>
+                    <a href="#">Annuler</a>
                 </td>
             </tr>
         </tbody>
@@ -55,7 +67,8 @@
     </table>
 
     <div class="crea_sortie_button">
-        <a href="{{path('sortie_creer')}}">Créer une sortie</a>
+        <a href="{{path('sortie_creer')}}"><button>Créer une nouvelle sortie</button></a>
     </div>
+</div>
 
 {% endblock %}
