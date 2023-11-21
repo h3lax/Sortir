@@ -38,10 +38,10 @@ class SortiesController extends AbstractController
         $checker->checkPostAuth($participant);
 
         $donnees = new SearchData();
-        $filtreSortiesForm = $this->createForm(SearchSortiesType::class, $donnees);
         if (empty($donnees->campus)) {
             $donnees->campus = $this->getUser()->getCampus();
         }
+        $filtreSortiesForm = $this->createForm(SearchSortiesType::class, $donnees);
         $filtreSortiesForm->handleRequest($request);
         $sorties = $sortieRepository->rechercheFiltre($donnees);
 
