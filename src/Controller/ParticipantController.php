@@ -142,7 +142,7 @@ class ParticipantController extends AbstractController
                  // Enregistrez les modifications dans la base de données
                  $entityManager->flush();
     
-                $this->addFlash('success', 'Inscription réussie à la sortie !');
+                $this->addFlash('success', 'Vous êtes maintenant inscrit à cette sortie !');
             }
 
             return $this->redirectToRoute('sortie_accueil');
