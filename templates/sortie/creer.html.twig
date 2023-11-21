@@ -33,6 +33,10 @@
                     .catch(error => {
                         console.error('Erreur lors de la récupération des lieux :', error);
                     });
+                document.querySelectorAll('.hidden-lieu').forEach(function (show){
+                    show.style.display = 'inline-block';
+                });
+
             });
 
             document.getElementById('sortie_lieu').addEventListener('change', function (){
@@ -50,6 +54,9 @@
                     .catch(error => {
                         console.error('Erreur lors de la récupération des coordonées :', error);
                     });
+                document.querySelectorAll('.hidden-coord').forEach(function (show){
+                    show.style.display = 'inline-block';
+                });
             });
 
 
