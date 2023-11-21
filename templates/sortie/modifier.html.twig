@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Créer une sortie | {{ parent() }}{% endblock %}
+{% block title %}Modifier "{{ sortie.nom }}" | {{ parent() }}{% endblock %}
 
 {% block body %}
-{% include 'nav/nav.html.twig' %}
+    {% include 'nav/nav.html.twig' %}
 
     <div>
         {{ form_start(sortieForm) }}
@@ -66,6 +66,3 @@
 
 
 {% endblock %}
-
-
-
