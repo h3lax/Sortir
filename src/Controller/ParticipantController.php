@@ -105,32 +105,50 @@ class ParticipantController extends AbstractController
 
             $sortie = $sortieRepository->find($id);
 
+            $participant = $this->getUser();
+
+            $currentDate = new \DateTime();
+
+            //Savoir si la sortie existe bien
+
             if(!$sortie) {
                 throw $this->createNotFoundException('Sortie inexistante !');
-            }
-            else {
-
-                $participant = $this->getUser();
-
-                //Test si sortie n'est pas passée
-
-                if ($sortie->estInscrit($participant)) {
-                    $this->addFlash('warning', 'Vous êtes déjà inscrit à cette sortie.');
-                }
-                else {
-                    $sortie->addParticipant($participant);
-                }
-
-                // Enregistrez les modifications dans la base de données
-                $entityManager->flush();
-
-                $this->addFlash('success', 'Inscription réussie à la sortie !');
-
                 return $this->redirectToRoute('sortie_accueil');
             }
 
-        }
+            //Savoir si la date de clôture n'a pas été dépassée
 
+            elseif($sortie->getDateLimiteInscription() > $currentDate) {
+                $this->addFlash('warning', 'Inscriptions clôturées pour cette sortie !');
+                return $this->redirectToRoute('sortie_accueil');
+            }
+
+            //Savoir si le nombre max de participants à la sortie a été atteint
+
+            elseif (count($sortie->getParticipants()) >= $sortie->getNbInscriptionsMax()) {
+                $this->addFlash('warning', 'Nombre de participants max atteint pour cette sortie, désolés !');
+                return $this->redirectToRoute('sortie_accueil');
+            }
+
+            //Savoir si la personne est déjà inscrite ou pas
+
+            elseif ($sortie->estInscrit($participant)) {
+                $this->addFlash('warning', 'Vous êtes déjà inscrit à cette sortie !');
+                return $this->redirectToRoute('sortie_accueil');
+            }
+            
+            else {
+                $sortie->addParticipant($participant);
+                 // Enregistrez les modifications dans la base de données
+                 $entityManager->flush();
+    
+                $this->addFlash('success', 'Inscription réussie à la sortie !');
+            }
+
+            return $this->redirectToRoute('sortie_accueil');
+
+        }
+    
         //Se désister d'une sortie
 
         /**
@@ -143,6 +161,7 @@ class ParticipantController extends AbstractController
             if(!$sortie) {
                 throw $this->createNotFoundException('Sortie inexistante !');
             }
+
             else {
                 $participant = $this->getUser();
 

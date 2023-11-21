@@ -10,9 +10,9 @@
         <h2>Afficher une sortie</h2>
                 <p>Nom de la sortie : {{sortie.nom}} </p>
                 <p>Campus : {{sortie.siteOrganisateur.nom}} </p>
-                <p>Date et heure de la sortie : {{sortie.dateHeureDebut|date('Y-m-d-h-i-s')}} </p>
+                <p>Date et heure de la sortie : {{sortie.dateHeureDebut|date('j F Y, g:i a')}} </p>
                 <p>Lieu : {{sortie.lieu.nom}} </p>
-                <p>Date limite d'inscription : {{sortie.dateLimiteInscription|date('Y-m-d-h-i-s')}} </p>
+                <p>Date limite d'inscription : {{sortie.dateLimiteInscription|date('j F Y, g:i a')}} </p>
                 <p>Rue : {{sortie.lieu.rue}} </p>
                 <p>Nombre de places : {{sortie.nbInscriptionsMax}} </p>
                 <p>Code postal : {{sortie.lieu.ville.codePostal}} </p>
@@ -26,7 +26,7 @@
     <div>
         <h4>Liste des participants inscrits : </h4>
         
-        {% for participant in sortie.participants %}
+      
         <table border="1">
             <thead>
                 <tr>
@@ -35,17 +35,14 @@
                 </tr>
             </thead>
             <tbody>
+              {% for participant in sortie.participants %}
                 <tr>
                     <td>{{participant.pseudo}}</td>
                     <td>{{participant.prenom}} {{participant.nom|upper}}</td>
                 </tr>
             </tbody>
+             {% endfor %}
         </table>
-        {% endfor %}
     </div>
-
-            <li><a href="{{path('sortie_accueil')}}">Retour accueil</a></li>
-
-
 {% endblock %}
 
