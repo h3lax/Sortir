@@ -7,6 +7,7 @@ use App\Entity\Sortie;
 use App\Form\ModifierProfilType;
 use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
+use App\Security\ActifChecker;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -24,9 +25,10 @@ class ParticipantController extends AbstractController
     /**
      * @Route("/participant/profil", name="participant_profil")
      */
-    public function profil(): Response
+    public function profil(ActifChecker $checker): Response
     {
         $participant = $this->getUser();
+        $checker->checkPostAuth($participant);
 
         if (!$participant){
             throw $this->createNotFoundException('Oups... Nous ne parvenons pas à retrouver cet utilisateur.');
@@ -38,10 +40,12 @@ class ParticipantController extends AbstractController
     /**
      * @Route("/participant/modifierprofil", name="participant_modifierprofil")
      */
-    public function modifierProfil(Request $request, UserPasswordHasherInterface $mdpHasher, SluggerInterface $slugger, EntityManagerInterface $entityManager): Response
+    public function modifierProfil(Request $request, UserPasswordHasherInterface $mdpHasher, SluggerInterface $slugger, EntityManagerInterface $entityManager, ActifChecker $checker): Response
     {
 
         $participant=$this->getUser();
+        $checker->checkPostAuth($participant);
+
         $modifierForm = $this->createForm(ModifierProfilType::class, $participant);
         $modifierForm->handleRequest($request);
 
@@ -101,7 +105,10 @@ class ParticipantController extends AbstractController
         /**
          * @Route("/inscription/{id}", name="inscription_sortie")
          */
-        public function inscriptionSortie(int $id, ParticipantRepository $participantRepository, SortieRepository $sortieRepository, Request $request,  EntityManagerInterface $entityManager ): Response {
+        public function inscriptionSortie(int $id, ParticipantRepository $participantRepository, SortieRepository $sortieRepository, Request $request,  EntityManagerInterface $entityManager, ActifChecker $checker): Response {
+
+            $participant=$this->getUser();
+            $checker->checkPostAuth($participant);
 
             $sortie = $sortieRepository->find($id);
 
@@ -109,8 +116,6 @@ class ParticipantController extends AbstractController
                 throw $this->createNotFoundException('Sortie inexistante !');
             }
             else {
-
-                $participant = $this->getUser();
 
                 //Test si sortie n'est pas passée
 
@@ -136,7 +141,10 @@ class ParticipantController extends AbstractController
         /**
          * @Route("/desistement/{id}", name="desistement_sortie")
          */
-        public function desistementSortie(int $id, ParticipantRepository $participantRepository, SortieRepository $sortieRepository, Request $request,  EntityManagerInterface $entityManager ): Response {
+        public function desistementSortie(int $id, ParticipantRepository $participantRepository, SortieRepository $sortieRepository, Request $request,  EntityManagerInterface $entityManager, ActifChecker $checker): Response {
+
+            $participant=$this->getUser();
+            $checker->checkPostAuth($participant);
 
             $sortie = $sortieRepository->find($id);
 
@@ -144,7 +152,6 @@ class ParticipantController extends AbstractController
                 throw $this->createNotFoundException('Sortie inexistante !');
             }
             else {
-                $participant = $this->getUser();
 
             //Test si sortie n'est pas passée
 

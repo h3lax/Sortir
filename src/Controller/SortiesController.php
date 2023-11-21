@@ -9,6 +9,7 @@ use App\Form\SortieType;
 use App\Repository\EtatRepository;
 use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
+use App\Security\ActifChecker;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,9 +29,14 @@ class SortiesController extends AbstractController
      */
     public function accueil(
         SortieRepository $sortieRepository,
-        Request          $request
+        Request          $request,
+        ActifChecker $checker
     ): Response
     {
+
+        $participant=$this->getUser();
+        $checker->checkPostAuth($participant);
+
         $donnees = new SearchData();
         $filtreSortiesForm = $this->createForm(SearchSortiesType::class, $donnees);
         if (empty($donnees->campus)) {
@@ -52,8 +58,11 @@ class SortiesController extends AbstractController
     /**
      * @ROUTE("/detail/{id}", name="detail")
      */
-    public function detail(int $id, SortieRepository $sortieRepository): Response
+    public function detail(int $id, SortieRepository $sortieRepository, ActifChecker $checker): Response
     {
+
+        $participant=$this->getUser();
+        $checker->checkPostAuth($participant);
 
         $sortie = $sortieRepository->find($id);
 
@@ -71,9 +80,17 @@ class SortiesController extends AbstractController
     public function creer(
         Request                $request,
         EntityManagerInterface $entityManager,
-        EtatRepository         $etatRepository
+        EtatRepository         $etatRepository,
+        ParticipantRepository  $participantRepository,
+        ActifChecker $checker
+
+        
+
     ): Response
     {
+        $participant=$this->getUser();
+        $checker->checkPostAuth($participant);
+
         $sortie = new Sortie();
         $sortieForm = $this->createForm(SortieType::class, $sortie);
 
