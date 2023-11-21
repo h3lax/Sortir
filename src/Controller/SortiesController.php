@@ -81,7 +81,11 @@ class SortiesController extends AbstractController
         Request                $request,
         EntityManagerInterface $entityManager,
         EtatRepository         $etatRepository,
+        ParticipantRepository  $participantRepository,
         ActifChecker $checker
+
+
+
     ): Response
     {
         $participant=$this->getUser();
