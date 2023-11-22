@@ -83,9 +83,6 @@ class SortiesController extends AbstractController
         EtatRepository         $etatRepository,
         ParticipantRepository  $participantRepository,
         ActifChecker $checker
-
-        
-
     ): Response
     {
         $participant=$this->getUser();
@@ -139,11 +136,56 @@ class SortiesController extends AbstractController
         $sortie = $sortieRepository->find($id);
         $sortieForm = $this->createForm(SortieType::class, $sortie);
 
-        $sortie->setOrganisateur($this->getUser());
         $sortieForm->handleRequest($request);
+
+        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+
+            if ($sortieForm->getClickedButton() && $sortieForm->getClickedButton()->getName() === 'save') {
+                $etat = $etatRepository->findOneBy(['libelle' => 'Créée']);
+                if ($etat) {
+                    $sortie->setEtat($etat);
+                }
+                $entityManager->persist($sortie);
+                $entityManager->flush();
+                $this -> addFlash('success','Sortie enregistrée! N\'oubliez pas que vous devrez la publier pour la rendre accessible à d\'autres participants!');
+                return $this->redirectToRoute('sortie_accueil');
+
+            } elseif ($sortieForm->getClickedButton() && $sortieForm->getClickedButton()->getName() === 'push') {
+                $etat = $etatRepository->findOneBy(['libelle' => 'Ouverte']);
+                if ($etat) {
+                    $sortie->setEtat($etat);
+                }
+                $entityManager->persist($sortie);
+                $entityManager->flush();
+                $this -> addFlash('success','Sortie publiée!');
+                return $this->redirectToRoute('sortie_accueil');
+            }
+
+        }
 
 
         return $this->render('sortie/modifier.html.twig', ['sortieForm' => $sortieForm->createView(), 'sortie'=>$sortie]);
+    }
+
+    /**
+     * @Route("/supprimer/{id}", name="supprimer", methods="DELETE")
+     */
+    public function supprimer(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        SortieRepository $sortieRepository,
+        $id,
+        ActifChecker $checker
+    ):Response{
+        $participant=$this->getUser();
+        $checker->checkPostAuth($participant);
+        if($this -> isCsrfTokenValid('delete'.$id, $request->get('_token'))){
+           $sortie = $sortieRepository->find($id);
+           $entityManager->remove($sortie);
+           $entityManager->flush();
+           $this -> addFlash('success','Sortie supprimée :/');
+        }
+        return $this->redirectToRoute('sortie_accueil');
     }
 
 

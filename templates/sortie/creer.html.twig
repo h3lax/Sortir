@@ -15,6 +15,7 @@
             document.getElementById('sortie_ville').addEventListener('change', function() {
                 var selectedVilleId = this.value;
 
+
                 // Récupération des lieux de la ville en AJAX
                 fetch('../api/lieux/' + selectedVilleId)
                     .then(response => response.json())
