@@ -188,5 +188,47 @@ class SortiesController extends AbstractController
         return $this->redirectToRoute('sortie_accueil');
     }
 
+    /**
+     * @Route("/annuler/{id}", name="annuler", methods={"GET","CANCEL"})
+     */
+    public function annuler(
+        Request $request,
+        SortieRepository $sortieRepository,
+        EntityManagerInterface $entityManager,
+        EtatRepository $etatRepository,
+        $id
+    ):Response{
+        $sortie = $sortieRepository->find($id);
+        //Si ce n'est pas l'organisateur qui tente d'annuler la sortie il est reconduit
+        if($sortie->getOrganisateur()!==$this->getUser()){
+            $this -> addFlash('error','Fuck OFFF!!');
+            return $this->redirectToRoute('sortie_accueil');
+        }
+        //Récupération des etats
+        $etats = $etatRepository->getlibelles();
+        if($sortie->getEtat()!==$etats['Clôturée']&&$sortie->getEtat()!==$etats['Ouverte']){
+            $this -> addFlash('error','Cette sortie ne peut pas être annulée voyons !');
+            return $this->redirectToRoute('sortie_accueil');
+        }
+
+
+
+        if($this -> isCsrfTokenValid('cancel'.$id, $request->get('_token'))){
+            $sortie = $sortieRepository->find($id);
+            $motif = $request->request->get('motif').
+                ("\n\n---------Description----------\n").
+                $sortie->getInfosSortie();
+            $sortie->setInfosSortie($motif);
+            $sortie->setEtat($etats['Annulée']);
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+            $this -> addFlash('success','Sortie annulée :/');
+            return $this->redirectToRoute('sortie_accueil');
+        }
+
+        return $this->render('sortie/annuler.html.twig',['sortie'=>$sortie]);
+    }
+
+
 
 }
