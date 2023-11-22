@@ -9,6 +9,11 @@
         {{ form_start(sortieForm) }}
         {{ form_widget(sortieForm) }}
         {{ form_end(sortieForm) }}
+        <form method="post" action="{{ path('sortie_supprimer', {'id': sortie.id}) }}">
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ sortie.id) }}">
+            <button>Supprimer</button>
+        </form>
         <a href="{{ path('sortie_accueil') }}">Annuler</a>
 
         <script>
@@ -16,7 +21,7 @@
                 var selectedVilleId = this.value;
 
                 // Récupération des lieux de la ville en AJAX
-                fetch('../api/lieux/' + selectedVilleId)
+                fetch('../../api/lieux/' + selectedVilleId)
                     .then(response => response.json())
                     .then(data => {
                         // Injection des données dans le menu déroulant
@@ -42,7 +47,7 @@
             document.getElementById('sortie_lieu').addEventListener('change', function (){
                 var selectedLieuId = this.value;
 
-                fetch('../api/coordonnees/'+ selectedLieuId)
+                fetch('../../api/coordonnees/'+ selectedLieuId)
                     .then(response => response.json())
                     .then(data => {
 
