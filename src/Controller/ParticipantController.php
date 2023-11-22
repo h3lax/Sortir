@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Participant;
 use App\Entity\Sortie;
+use App\Entity\Etat;
 use App\Form\ModifierProfilType;
 use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
+use App\Repository\EtatRepository;
 use App\Security\ActifChecker;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -125,7 +127,7 @@ class ParticipantController extends AbstractController
         /**
          * @Route("/inscription/{id}", name="inscription_sortie")
          */
-        public function inscriptionSortie(int $id, ParticipantRepository $participantRepository, SortieRepository $sortieRepository, Request $request,  EntityManagerInterface $entityManager, ActifChecker $checker): Response {
+        public function inscriptionSortie(int $id, EtatRepository $etatRepository, ParticipantRepository $participantRepository, SortieRepository $sortieRepository, Request $request,  EntityManagerInterface $entityManager, ActifChecker $checker): Response {
 
             $participant=$this->getUser();
             $checker->checkPostAuth($participant);
@@ -147,6 +149,12 @@ class ParticipantController extends AbstractController
 
             elseif($sortie->getDateLimiteInscription() < $currentDate) {
                 $this->addFlash('warning', 'Inscriptions clôturées pour cette sortie !');
+               
+                $etat = $etatRepository->findOneBy(['libelle' => 'Clôturée']);
+                if ($etat) {
+                    $sortie->setEtat($etat);
+                }
+
                 return $this->redirectToRoute('sortie_accueil');
             }
 
@@ -170,6 +178,16 @@ class ParticipantController extends AbstractController
                  $entityManager->flush();
     
                 $this->addFlash('success', 'Vous êtes maintenant inscrit à cette sortie !');
+
+                //Passage de l'état de la sortie à "clôturée" quand le nombre d'inscrits max est atteint
+                if(count($sortie->getParticipants()) >= $sortie->getNbInscriptionsMax()) {
+                    $etat = $etatRepository->findOneBy(['libelle' => 'Clôturée']);
+                    if ($etat) {
+                        $sortie->setEtat($etat);
+                        $entityManager->persist($sortie);
+                        $entityManager->flush();
+                    }
+                }
             }
 
             return $this->redirectToRoute('sortie_accueil');
@@ -181,7 +199,7 @@ class ParticipantController extends AbstractController
         /**
          * @Route("/desistement/{id}", name="desistement_sortie")
          */
-        public function desistementSortie(int $id, ParticipantRepository $participantRepository, SortieRepository $sortieRepository, Request $request,  EntityManagerInterface $entityManager, ActifChecker $checker): Response {
+        public function desistementSortie(int $id, EtatRepository $etatRepository, ParticipantRepository $participantRepository, SortieRepository $sortieRepository, Request $request,  EntityManagerInterface $entityManager, ActifChecker $checker): Response {
 
             $participant=$this->getUser();
             $checker->checkPostAuth($participant);
@@ -219,8 +237,17 @@ class ParticipantController extends AbstractController
                 $entityManager->flush();
 
                 $this->addFlash('success', 'Votre inscripton a bien été annulée !');
-            }
 
+                //Passage de l'état de la sortie à "créée" quand la date n'est pas dépassée et quand il reste de la place
+                if($sortie->getDateHeureDebut() > $currentDate && count($sortie->getParticipants()) < $sortie->getNbInscriptionsMax()) {
+                    $etat = $etatRepository->findOneBy(['libelle' => 'Créée']);
+                    if ($etat) {
+                    $sortie->setEtat($etat);
+                    $entityManager->persist($sortie);
+                    $entityManager->flush();
+                }
+                }
+            }
                 return $this->redirectToRoute('sortie_accueil');
             }
 
