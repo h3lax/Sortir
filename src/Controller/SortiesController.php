@@ -174,18 +174,17 @@ class SortiesController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager,
         SortieRepository $sortieRepository,
-        EtatRepository $etatRepository,
-        Sortie $sortie,
         $id,
         ActifChecker $checker
     ):Response{
-        if($this -> isCsrfTokenValid('delete'.$sortie->getId(), $request->get('_token'))){
-            dump('c bon');
-        }
         $participant=$this->getUser();
         $checker->checkPostAuth($participant);
-
-       // $this->$entityManager->remove($sortie);
+        if($this -> isCsrfTokenValid('delete'.$id, $request->get('_token'))){
+           $sortie = $sortieRepository->find($id);
+           $entityManager->remove($sortie);
+           $entityManager->flush();
+           $this -> addFlash('success','Sortie supprimée :/');
+        }
         return $this->redirectToRoute('sortie_accueil');
     }
 
