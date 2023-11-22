@@ -100,6 +100,26 @@ class ParticipantController extends AbstractController
         ]);
         }
 
+        //Affichage du profil d'un autre utilisateur
+
+        /**
+         * @Route("/participant/profil/{id}", name="profil_autre_utilisateur")
+        */
+        public function profilAutreUtilisateur(int $id, ParticipantRepository $participantRepository, ActifChecker $checker):Response {
+          
+            $participant=$this->getUser();
+            $checker->checkPostAuth($participant);
+
+            $participant = $participantRepository->find($id);
+
+            return $this->render("participant/profilAutre.html.twig", [
+                "participant" => $participant
+            ]
+
+        );
+
+        }
+
         //S'inscrire à une sortie
 
         /**
