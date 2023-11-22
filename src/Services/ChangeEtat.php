@@ -18,9 +18,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class ChangeEtat extends AbstractController
 {
 //Rechercher les sorties "ouvertes" pour lesquelles la date de clôture est inférieure ou égale à la date du jour (ou nombre max de participants atteints) et les passer en "clôturé"
-    public function cloturerSorties (ArrayCollection $sorties, EntityManagerInterface $entityManager,EtatRepository $etatRepository)
+    public function cloturerSorties (Sortie $sortie, ArrayCollection $sorties, EntityManagerInterface $entityManager,EtatRepository $etatRepository, SortieRepository $sortieRepository)
     {
-        if ()
+
+        $now = new \DateTime('now');
+
 
     }
 
