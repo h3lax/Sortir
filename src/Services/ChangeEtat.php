@@ -2,29 +2,48 @@
 
 namespace App\Services;
 
+use App\Entity\Etat;
 use App\Entity\Sortie;
 use App\Repository\EtatRepository;
 use App\Repository\SortieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\QueryBuilder;
-use PhpParser\Node\Expr\Array_;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
-class ChangeEtat extends AbstractController
+class ChangeEtat
 {
-//Rechercher les sorties "ouvertes" pour lesquelles la date de clôture est inférieure ou égale à la date du jour (ou nombre max de participants atteints) et les passer en "clôturé"
-    public function cloturerSorties (Sortie $sortie, ArrayCollection $sorties, EntityManagerInterface $entityManager,EtatRepository $etatRepository, SortieRepository $sortieRepository)
+
+
+    public function __construct(SortieRepository $sortieRepository, EtatRepository $etatRepository, EntityManagerInterface $entityManager)
     {
-
-        $now = new \DateTime('now');
-
-
+        $this->sortieRepository = $sortieRepository;
+        $this->etatRepository = $etatRepository;
+        $this->entityManager = $entityManager;
     }
+
+
+    //Rechercher les sorties "ouvertes" pour lesquelles la date de clôture est inférieure ou égale à la date du jour (ou nombre max de participants atteints) et les passer en "clôturé"
+    public function cloturerSortie(ArrayCollection $sorties, EtatRepository $etatRepository)
+    {
+        $etat = $etatRepository->findOneBy(['libelle' => 'Clôturée']);
+
+        foreach ($sorties as $sortie)
+        {
+            //Verifie que la sortie est "ouverte"
+            if ($sortie->getEtat()->getLibelle() == 'Ouverte')
+            {
+                // Vérifie si la date de clôture est dépassée ou si le nombre maximum de participants est atteint
+                if ($sortie->getDateHeureDebut() <= new \DateTime() || $sortie->getNbInscriptionsMax() <= count($sortie->getParticipants()))
+                {
+                $sortie->setEtat($etat);
+                $this->entityManager->persist($sortie);
+                }
+            }
+
+        }
+        $this->entityManager->flush();
+    }
+
+
 
 
 //Rechercher les sorties "clôturées" pour lesquelles la date de début de sortie est inférieure ou égale à la date/heure courante et les passer en "en cours"
