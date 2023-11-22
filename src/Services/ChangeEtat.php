@@ -22,9 +22,9 @@ class ChangeEtat
 
 
     //Rechercher les sorties "ouvertes" pour lesquelles la date de clôture est inférieure ou égale à la date du jour (ou nombre max de participants atteints) et les passer en "clôturé"
-    public function cloturerSortie(ArrayCollection $sorties, EtatRepository $etatRepository)
+    public function cloturerSortie(ArrayCollection $sorties)
     {
-        $etat = $etatRepository->findOneBy(['libelle' => 'Clôturée']);
+        $etat = $this->etatRepository->findOneBy(['libelle' => 'Clôturée']);
 
         foreach ($sorties as $sortie)
         {
