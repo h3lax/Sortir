@@ -46,7 +46,10 @@
                         x
                     {% endif %}
                 </td>
-                <td>{{sortie.organisateur.prenom}} {{sortie.organisateur.nom|upper}}</td>
+                <td>
+                    <a href="{{path('profil_autre_utilisateur', {'id': sortie.organisateur.id})}}">{{sortie.organisateur.prenom}} {{sortie.organisateur.nom|upper}}</a>
+                </td>
+                    
                 <td>
                     <a href="{{path('sortie_detail', {'id': sortie.id})}}">Afficher</a>
                     {% if app.user not in sortie.participants %}

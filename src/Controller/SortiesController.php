@@ -56,7 +56,7 @@ class SortiesController extends AbstractController
     //Affichage des détails d'une sortie
 
     /**
-     * @ROUTE("/detail/{id}", name="detail")
+     * @Route("/detail/{id}", name="detail")
      */
     public function detail(int $id, SortieRepository $sortieRepository, ActifChecker $checker): Response
     {
