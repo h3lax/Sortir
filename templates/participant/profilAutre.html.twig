@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+{% include 'nav/nav.html.twig' %}
+
+    <h2> Bienvenue sur le profil de {{ participant.pseudo }}</h2>
+
+    {% if participant.photoProfil is same as(null) %}
+        <img src="{{ asset('uploads/PhotoProfil/photoProfulDefault-655768f80bf61.webp') }}" alt="Photo de profil" />
+    {% else %}
+        <img src="{{ asset('uploads/PhotoProfil/' ~ participant.photoProfil) }}" alt="Photo de profil" />
+    {% endif %}
+
+    <ul>
+        <li>Prénom: {{ participant.prenom }}</li>
+        <li>Nom: {{ participant.nom }}</li>
+        <li>Téléphone: {{ participant.telephone }}</li>
+        <li>Email: {{ participant.mail }}</li>
+        <li>Campus: {{ participant.campus.nom }}</li>
+    </ul>
+
+    <button type="submit"><a href="{{ path('sortie_accueil') }}">Retour</a></button>
+
+{% endblock %}
+
+{% block title %}
+Profil Utilisateur | {{ parent() }}
+{% endblock %}
+
