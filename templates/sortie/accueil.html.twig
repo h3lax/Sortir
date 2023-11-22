@@ -57,10 +57,12 @@
                     {% if app.user in sortie.participants %}
                         <a href="{{path('desistement_sortie', {'id': sortie.id})}}">Se désister</a>
                     {% endif %}
-                    {% if app.user in sortie.organisateur %}
-                        <a href="#">Modifier</a>
+                    {% if app.user == sortie.organisateur %}
+                        <a href="{{path('sortie_modifier', {'id': sortie.id})}}">Modifier</a>
                     {% endif %}
-                    <a href="#">Publier</a>
+                    {% if sortie.etat == sortie.organisateur %}
+                        <a href="#">Publier</a>
+                    {% endif %}
                     <a href="#">Annuler</a>
                 </td>
             </tr>
