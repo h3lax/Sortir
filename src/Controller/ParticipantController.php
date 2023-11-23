@@ -51,7 +51,8 @@ class ParticipantController extends AbstractController
         $modifierForm = $this->createForm(ModifierProfilType::class, $participant);
         $modifierForm->handleRequest($request);
 
-        if ($modifierForm->isSubmitted() && $modifierForm->isValid()) {
+        if ($modifierForm->isSubmitted() && $modifierForm->isValid())
+        {
             $participant = $modifierForm->getData();
             $motPasse = $modifierForm->get('motPasse')->getData();
 
@@ -60,32 +61,35 @@ class ParticipantController extends AbstractController
             $photoProfil = $modifierForm->get('photoProfil')->getData();
 
             // Si il n'y a pas de photo
-            if ($photoProfil) {
+            if ($photoProfil)
+            {
                 $originalFilename = pathinfo($photoProfil->getClientOriginalName(), PATHINFO_FILENAME);
                 // Nom du fichier dans l'URL
                 $safeFilename = $slugger->slug($originalFilename);
                 $newFilename = $safeFilename.'-'.uniqid().'.'.$photoProfil->guessExtension();
 
                 // déplace la photo dans le dossier
-                try {
-                    $photoProfil->move(
+                try
+                {
+                    $photoProfil->move
+                    (
                         $this->getParameter('photo_profil'),
                         $newFilename
                     );
-                } catch (FileException $e) {
+                } catch (FileException $e)
+                {
 
                 }
-
 
                 $participant->setPhotoProfil($newFilename);
             }
 
             //hashe le MDP
-            if (null !== $motPasse){
-            $participant->setMotPasse(
+            if (null !== $motPasse)
+            {
+                $participant->setMotPasse(
                 $mdpHasher->hashPassword( $participant, $motPasse ) );
             }
-
 
             $entityManager ->persist($participant);
             $entityManager->flush();
@@ -97,8 +101,8 @@ class ParticipantController extends AbstractController
 
         $entityManager -> refresh($participant);
         return $this->render('participant/modifierProfil.html.twig', [
-            'modifierForm' => $modifierForm->createView(),
-        ]);
+            'modifierForm' => $modifierForm->createView(),]);
+
         }
 
         //Affichage du profil d'un autre utilisateur

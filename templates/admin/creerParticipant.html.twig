@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+
+
+{% block body %}
+
+
+    <div>
+
+
+        {{ form_start(creerForm) }}
+
+        {{ form_row(creerForm.administrateur, { label: 'Est administrateur:' }) }}
+
+        {{ form_row(creerForm.actif, { label: 'Est actif:' }) }}
+
+        {{ form_row(creerForm.pseudo, { label: 'Pseudo:' }) }}
+
+        {{ form_row(creerForm.prenom, { label: 'Prénom:' }) }}
+
+        {{ form_row(creerForm.nom, { label: 'Nom:' }) }}
+
+        {{ form_row(creerForm.telephone, { label: 'Téléphone:' }) }}
+
+        {{ form_row(creerForm.mail, { label: 'Email:' }) }}
+
+        {{ form_row(creerForm.motPasse.first, { label: 'Mot de passe:' }) }}
+
+        {{ form_row(creerForm.motPasse.second, { label: 'Confirmez le mot de passe:' }) }}
+
+        {{ form_row(creerForm.campus, { label: 'Campus:' }) }}
+
+
+
+        <button>Valider</button>
+        <button><a href="{{ path('sortie_accueil') }}">Retour</a></button>
+
+        {{ form_end(creerForm) }}
+    </div>
+{% endblock %}
+
+{% block title %}
+Modifier Profil Utilisateur | {{ parent() }}
+{% endblock %}
+
