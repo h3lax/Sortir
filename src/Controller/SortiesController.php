@@ -10,6 +10,7 @@ use App\Repository\EtatRepository;
 use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
 use App\Security\ActifChecker;
+use App\Services\ChangeEtat;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,7 +31,8 @@ class SortiesController extends AbstractController
     public function accueil(
         SortieRepository $sortieRepository,
         Request          $request,
-        ActifChecker $checker
+        ActifChecker $checker,
+        ChangeEtat $changeEtat
     ): Response
     {
 
@@ -44,6 +46,13 @@ class SortiesController extends AbstractController
         $filtreSortiesForm = $this->createForm(SearchSortiesType::class, $donnees);
         $filtreSortiesForm->handleRequest($request);
         $sorties = $sortieRepository->rechercheFiltre($donnees);
+
+        //met a jour l'etat des sorties affichées
+        $changeEtat->passCloturee($sorties);
+        $changeEtat->passEnCours($sorties);
+        $changeEtat->passPassee($sorties);
+        $changeEtat->passPasseeArchivee($sorties);
+        $changeEtat->passAnnuleeArchivee($sorties);
 
         $currentDate = new \DateTime();
         return $this->render("sortie/accueil.html.twig", [
