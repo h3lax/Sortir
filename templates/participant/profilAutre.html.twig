@@ -2,9 +2,7 @@
 
 {% block body %}
 
-{% include 'nav/nav.html.twig' %}
-
-    <h2> Bienvenue sur le profil de {{ participant.pseudo }}</h2>
+    <h2 class="text-center"> Bienvenue sur le profil de {{ participant.pseudo }}</h2>
 
     {% if participant.photoProfil is same as(null) %}
         <img src="{{ asset('uploads/PhotoProfil/photoProfulDefault-655768f80bf61.webp') }}" alt="Photo de profil" />
