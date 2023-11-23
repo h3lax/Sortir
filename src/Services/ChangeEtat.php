@@ -59,7 +59,7 @@ class ChangeEtat
             if ($sortie->getEtat() == $etats['Clôturée'])
             {
                 // Vérifie la condition
-                if ($sortie->getDateHeureDebut() <= $now)
+                if ($sortie->getDateHeureDebut() <= $now->modify("+{$sortie->getDuree()} minute"))
                 {
                     $sortie->setEtat($etats['En cours']);
                     $this->entityManager->persist($sortie);
@@ -87,13 +87,12 @@ class ChangeEtat
 //Rechercher les sorties "passées" pour lesquelles la date de début + durée est inférieure à la date/heure courante plus 1 mois et les passer en "historisée"
     public function passPasseeArchivee(Sortie $sortie, Array $etats, \DateTime $now)
     {
-        $dateArchivage=$now->modify('+1 month');
 
             //Verifie que la sortie est "passée"
             if ($sortie->getEtat() == $etats['Passée'])
             {
                 // Vérifie la condition
-                if ($sortie->getDateHeureDebut()->modify("+{$sortie->getDuree()} minute") <= $dateArchivage)
+                if ($sortie->getDateHeureDebut()->modify("+{$sortie->getDuree()} minute + 1 month") <= $now)
                 {
                     $sortie->setEtat($etats['Archivée']);
                     $this->entityManager->persist($sortie);
@@ -104,13 +103,12 @@ class ChangeEtat
 //Rechercher les sorties "annulées" pour lesquelles la date de début + durée est inférieure à la date/heure courante plus 1 mois et les passer en "historisée"
     public function passAnnuleeArchivee(Sortie $sortie, Array $etats, \DateTime $now)
     {
-        $dateArchivage=$now->modify('+1 month');
 
             //Verifie que la sortie est "annulée"
             if ($sortie->getEtat() == $etats['Annulée'])
             {
                 // Vérifie la condition
-                if ($sortie->getDateHeureDebut()->modify("+{$sortie->getDuree()} minute") <= $dateArchivage)
+                if ($sortie->getDateHeureDebut()->modify("+{$sortie->getDuree()} minute + 1 month") <= $now)
                 {
                     $sortie->setEtat($etats['Archivée']);
                     $this->entityManager->persist($sortie);
