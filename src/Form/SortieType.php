@@ -58,36 +58,12 @@ class SortieType extends AbstractType
                 'label' => 'Lieu',
                 'class' => Lieu::class,
                 'choice_label' => 'nom',
-                'attr'=>[
-                    'class'=> 'hidden-lieu',
-                    'style'=> 'display:none;'
-                ],
-                'label_attr'=>[
-                    'class'=> 'hidden-lieu',
-                    'style'=> 'display:none;'
-                ],
             ])
             ->add('latitude', NumberType::class, [
                 'mapped'=> false,
-                'attr'=>[
-                    'class'=> 'hidden-coord',
-                    'style'=> 'display:none;'
-                ],
-                'label_attr'=>[
-                    'class'=> 'hidden-coord',
-                    'style'=> 'display:none;'
-                ],
                 ])
             ->add('longitude', NumberType::class, [
                 'mapped'=> false,
-                'attr'=>[
-                    'class'=> 'hidden-coord',
-                    'style'=> 'display:none;'
-                ],
-                'label_attr'=>[
-                    'class'=> 'hidden-coord',
-                    'style'=> 'display:none;'
-                ],
                 ])
             ->add('save', SubmitType::class, [
                 'label'=> 'Enregistrer'
