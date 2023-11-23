@@ -10,6 +10,7 @@ use App\Repository\EtatRepository;
 use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
 use App\Security\ActifChecker;
+use App\Services\ChangeEtat;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,12 +31,16 @@ class SortiesController extends AbstractController
     public function accueil(
         SortieRepository $sortieRepository,
         Request          $request,
-        ActifChecker $checker
+        ActifChecker $checker,
+        ChangeEtat $changeEtat,
+        EtatRepository $etatRepository
     ): Response
     {
 
-        $participant=$this->getUser();
+        $participant = $this->getUser();
         $checker->checkPostAuth($participant);
+
+        $etats = $etatRepository->getlibelles();
 
         $donnees = new SearchData();
         if (empty($donnees->campus)) {
@@ -45,15 +50,21 @@ class SortiesController extends AbstractController
         $filtreSortiesForm->handleRequest($request);
         $sorties = $sortieRepository->rechercheFiltre($donnees);
 
+        //met a jour l'etat des sorties affichées
+        $changeEtat->passCloturee($sorties);
+        $changeEtat->passEnCours($sorties);
+        $changeEtat->passPassee($sorties);
+        $changeEtat->passPasseeArchivee($sorties);
+        $changeEtat->passAnnuleeArchivee($sorties);
+
         $currentDate = new \DateTime();
         return $this->render("sortie/accueil.html.twig", [
             "sorties" => $sorties,
             "currentDate" => $currentDate,
-            "filtreSortiesForm" => $filtreSortiesForm->createView()
-        ]);
+            "filtreSortiesForm" => $filtreSortiesForm->createView()]);
     }
 
-    //Affichage des détails d'une sortie
+//Affichage des détails d'une sortie
 
     /**
      * @Route("/detail/{id}", name="detail")
