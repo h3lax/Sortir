@@ -32,12 +32,15 @@ class SortiesController extends AbstractController
         SortieRepository $sortieRepository,
         Request          $request,
         ActifChecker $checker,
-        ChangeEtat $changeEtat
+        ChangeEtat $changeEtat,
+        EtatRepository $etatRepository
     ): Response
     {
 
-        $participant=$this->getUser();
+        $participant = $this->getUser();
         $checker->checkPostAuth($participant);
+
+        $etats = $etatRepository->getlibelles();
 
         $donnees = new SearchData();
         if (empty($donnees->campus)) {
@@ -58,11 +61,10 @@ class SortiesController extends AbstractController
         return $this->render("sortie/accueil.html.twig", [
             "sorties" => $sorties,
             "currentDate" => $currentDate,
-            "filtreSortiesForm" => $filtreSortiesForm->createView()
-        ]);
+            "filtreSortiesForm" => $filtreSortiesForm->createView()]);
     }
 
-    //Affichage des détails d'une sortie
+//Affichage des détails d'une sortie
 
     /**
      * @Route("/detail/{id}", name="detail")

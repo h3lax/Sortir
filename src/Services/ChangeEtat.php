@@ -5,7 +5,6 @@ namespace App\Services;
 
 use App\Repository\EtatRepository;
 use App\Repository\SortieRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ChangeEtat
@@ -77,7 +76,7 @@ class ChangeEtat
             if ($sortie->getEtat() == $etats['En cours'])
             {
                 // Vérifie la condition
-                if ($sortie->getDateHeureDebut() + $sortie->getDuree() <= new \DateTime())
+                if ($sortie->getDateHeureDebut()<= new \DateTime())
                 {
                     $sortie->setEtat($etats['Passée']);
                     $this->entityManager->persist($sortie);
@@ -89,7 +88,7 @@ class ChangeEtat
     }
 
 
-//Rechercher les sorties "passées" pour lesquelles la date de début + durée est inférieure à la date/heure courante plus 1 mois et les passer en "historisée"
+//Rechercher les sorties "passées" pour lesquelles la date de début à la date/heure courante plus 1 mois et les passer en "historisée"
     public function passPasseeArchivee(Array $sorties)
     {
         $etats = $this->etatRepository->getlibelles();
@@ -102,7 +101,7 @@ class ChangeEtat
             if ($sortie->getEtat() == $etats['Passée'])
             {
                 // Vérifie la condition
-                if ($sortie->getDateHeureDebut() + $sortie->getDuree() <= $dateArchivage)
+                if ($sortie->getDateHeureDebut() <= $dateArchivage)
                 {
                     $sortie->setEtat($etats['Archivée']);
                     $this->entityManager->persist($sortie);
@@ -113,7 +112,7 @@ class ChangeEtat
         $this->entityManager->flush();
     }
 
-//Rechercher les sorties "annulées" pour lesquelles la date de début + durée est inférieure à la date/heure courante plus 1 mois et les passer en "historisée"
+//Rechercher les sorties "annulées" pour lesquelles la date de début est inférieure à la date/heure courante plus 1 mois et les passer en "historisée"
     public function passAnnuleeArchivee(Array $sorties)
     {
         $etats = $this->etatRepository->getlibelles();
