@@ -39,7 +39,7 @@
                 <td>{{sortie.dateHeureDebut|date('j F Y, H:i')}}</td>
                 <td>{{sortie.dateLimiteInscription|date('j F Y')}}</td>
                 <td>{{sortie.participants|length}} / {{sortie.nbInscriptionsMax}}</td>
-                <td></td>
+                <td>{{ sortie.etat.libelle }}</td>
                 <td>
                     {% if app.user in sortie.participants %}  
                         x
@@ -57,13 +57,15 @@
                     {% if app.user in sortie.participants %}
                         <a href="{{path('desistement_sortie', {'id': sortie.id})}}">Se désister</a>
                     {% endif %}
-                    {% if app.user == sortie.organisateur %}
+                    {% if app.user == sortie.organisateur and sortie.etat.libelle == 'Créée' %}
                         <a href="{{path('sortie_modifier', {'id': sortie.id})}}">Modifier</a>
                     {% endif %}
-                    {% if sortie.etat == sortie.organisateur %}
+                    {% if app.user == sortie.organisateur and sortie.etat.libelle == 'Créée' %}
                         <a href="#">Publier</a>
                     {% endif %}
-                    <a href="#">Annuler</a>
+                    {% if app.user == sortie.organisateur and (sortie.etat.libelle == 'Ouverte' or sortie.etat.libelle == 'Clôturée') %}
+                        <a href="{{path('sortie_annuler', {'id': sortie.id})}}">Annuler</a>
+                    {% endif %}
                 </td>
             </tr>
         </tbody>

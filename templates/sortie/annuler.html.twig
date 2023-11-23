@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{sortie.nom}}{{ parent() }}{% endblock %}
+
+{% block body %}
+
+
+<div class="detailsSortie">
+    <h2>Annuler une sortie</h2>
+    <p>Nom de la sortie : {{sortie.nom}} </p>
+    <p>Date et heure de la sortie : {{sortie.dateHeureDebut|date('j F Y, H:i')}} </p>
+    <p>Lieu : {{sortie.lieu.nom}} </p>
+    <p>Rue : {{sortie.lieu.rue}} </p>
+    <p>Code postal : {{sortie.lieu.ville.codePostal}} </p>
+    <form method="post" action="">
+        <label for="motif">Motif</label><textarea name="motif" id="motif"></textarea>
+
+        <div>
+            <input type="submit" value="Valider">
+            <a href="{{ path('sortie_accueil',{'id': sortie.id }) }}">Annuler</a>
+            <input type="hidden" name="_method" value="CANCEL">
+            <input type="hidden" name="_token" value="{{ csrf_token('cancel' ~ sortie.id) }}">
+        </div>
+    </form>
+    </div>
+    {#
+    <form method="post" action="{{ path('ann', {'id': sortie.id}) }}">
+        <input type="hidden" name="_method" value="DELETE">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ sortie.id) }}">
+        <button>Supprimer</button>
+    </form>
+    #}
+{% endblock %}
