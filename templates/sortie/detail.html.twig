@@ -4,30 +4,68 @@
 
 {% block body %}
 
+    <div class="container mt-4">
+        <h2 class="text-center">Détails de la sortie</h2>
+  
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Nom de la sortie : </strong>{{sortie.nom}} </p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Campus : </strong>{{sortie.siteOrganisateur.nom}} </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Date et heure de la sortie : </strong>{{sortie.dateHeureDebut|date('j F Y, H:i')}} </p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Lieu : </strong>{{sortie.lieu.nom}} </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Date limite d'inscription : </strong>{{sortie.dateLimiteInscription|date('j F Y')}} </p>    
+            </div>
+            <div class="col-md-6">
+                <p><strong>Rue : </strong>{{sortie.lieu.rue}} </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Nombre de places : </strong>{{sortie.nbInscriptionsMax}} </p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Code postal : </strong>{{sortie.lieu.ville.codePostal}} </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Durée : </strong>{{sortie.duree}} heures </p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Latitude : </strong>{{sortie.lieu.latitude}} </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Description et infos : </strong>{{sortie.infosSortie}} </p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Longitude : </strong>{{sortie.lieu.longitude}} </p>
+            </div>
+        </div>
+        
+        <a href="{{path('inscription_sortie', {'id': sortie.id})}}"><button class="btn btn-info">S'inscrire</button></a>
 
-    <div class="detailsSortie">
-        <h2>Afficher une sortie</h2>
-                <p>Nom de la sortie : {{sortie.nom}} </p>
-                <p>Campus : {{sortie.siteOrganisateur.nom}} </p>
-                <p>Date et heure de la sortie : {{sortie.dateHeureDebut|date('j F Y, H:i')}} </p>
-                <p>Lieu : {{sortie.lieu.nom}} </p>
-                <p>Date limite d'inscription : {{sortie.dateLimiteInscription|date('j F Y')}} </p>
-                <p>Rue : {{sortie.lieu.rue}} </p>
-                <p>Nombre de places : {{sortie.nbInscriptionsMax}} </p>
-                <p>Code postal : {{sortie.lieu.ville.codePostal}} </p>
-                <p>Durée : {{sortie.duree}} heures </p>
-                <p>Latitude : {{sortie.lieu.latitude}} </p>
-                <p>Description et infos : {{sortie.infosSortie}} </p>
-                <p>Longitude : {{sortie.lieu.longitude}} </p>
-                <a href="{{path('inscription_sortie', {'id': sortie.id})}}"><button>S'inscrire</button></a>
-    </div>
+  
 
     <div>
-        <h4>Liste des participants inscrits : </h4>
+        <h4 class="text-center">Liste des participants inscrits : </h4>
         
       
-        <table border="1">
-            <thead>
+        <table class="table table-striped text-center">
+            <thead class="thead-dark">
                 <tr>
                     <th>Pseudo</th>
                     <th>Nom</th>
@@ -37,11 +75,16 @@
               {% for participant in sortie.participants %}
                 <tr>
                     <td>{{participant.pseudo}}</td>
-                    <td><a href="{{path('profil_autre_utilisateur', {'id': participant.id})}}">{{participant.prenom}} {{participant.nom|upper}}</a></td>
+                    <td><a href="{{path('profil_autre_utilisateur', {'id': participant.id})}}" >{{participant.prenom}} {{participant.nom|upper}}</a></td>
                 </tr>
             </tbody>
              {% endfor %}
         </table>
     </div>
+
+
+
+</div>
+
 {% endblock %}
 

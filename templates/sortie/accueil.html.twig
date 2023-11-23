@@ -5,7 +5,7 @@
 {% block body %}
 
 <div class="accueil">
-    <div id="presentationUser">
+    <div class="text-right">
         <p>Date du jour : {{currentDate|date('j F Y')}}</p>
         <p>Participant : </p>
     </div>
@@ -19,8 +19,8 @@
 
     </div>
 
-    <table border="1" class="affichageSorties">
-        <thead>
+    <table class="table table-striped text-center">
+        <thead class="thead-dark">
             <tr>
                 <th>Nom de la sortie</th>
                 <th>Date de la sortie</th>
@@ -76,5 +76,7 @@
         <a href="{{path('sortie_creer')}}"><button>Créer une nouvelle sortie</button></a>
     </div>
 </div>
+
+
 
 {% endblock %}
