@@ -51,11 +51,7 @@ class SortiesController extends AbstractController
         $sorties = $sortieRepository->rechercheFiltre($donnees);
 
         //met a jour l'etat des sorties affichées
-        $changeEtat->passCloturee($sorties);
-        $changeEtat->passEnCours($sorties);
-        $changeEtat->passPassee($sorties);
-        $changeEtat->passPasseeArchivee($sorties);
-        $changeEtat->passAnnuleeArchivee($sorties);
+        $changeEtat->makePass($sorties);
 
         $currentDate = new \DateTime();
         return $this->render("sortie/accueil.html.twig", [
