@@ -21,7 +21,7 @@ class ChangeEtat
 
 
     //Rechercher les sorties "ouvertes" pour lesquelles la date de clôture est inférieure ou égale à la date du jour (ou nombre max de participants atteints) et les passer en "clôturé"
-    public function passCloturee(ArrayCollection $sorties)
+    public function passCloturee(Array $sorties)
     {
         $etats = $this->etatRepository->getlibelles();
 
@@ -33,7 +33,7 @@ class ChangeEtat
                 // Vérifie si la date de clôture est dépassée ou si le nombre maximum de participants est atteint
                 if ($sortie->getDateLimiteInscription() <= new \DateTime() || $sortie->getNbInscriptionsMax() <= count($sortie->getParticipants()))
                 {
-                $sortie->setEtat($etats['Cloturée']);
+                $sortie->setEtat($etats['Clôturée']);
                 $this->entityManager->persist($sortie);
                 }
             }
@@ -44,14 +44,14 @@ class ChangeEtat
 
 
 //Rechercher les sorties "clôturées" pour lesquelles la date de début de sortie est inférieure ou égale à la date/heure courante et les passer en "en cours"
-    public function passEnCours(ArrayCollection $sorties)
+    public function passEnCours(Array $sorties)
     {
         $etats = $this->etatRepository->getlibelles();
 
         foreach ($sorties as $sortie)
         {
             //Verifie que la sortie est "Cloturée"
-            if ($sortie->getEtat() == $etats['Cloturée'])
+            if ($sortie->getEtat() == $etats['Clôturée'])
             {
                 // Vérifie la condition
                 if ($sortie->getDateHeureDebut() <= new \DateTime())
@@ -67,7 +67,7 @@ class ChangeEtat
 
 
 //Rechercher les sorties "en cours" pour lesquelles la date de début + durée est inférieure ou égale à la date/heure courante et les passer en "passé"
-    public function passPassee(ArrayCollection $sorties)
+    public function passPassee(Array $sorties)
     {
         $etats = $this->etatRepository->getlibelles();
 
@@ -90,7 +90,7 @@ class ChangeEtat
 
 
 //Rechercher les sorties "passées" pour lesquelles la date de début + durée est inférieure à la date/heure courante plus 1 mois et les passer en "historisée"
-    public function passPasseeArchivee(ArrayCollection $sorties)
+    public function passPasseeArchivee(Array $sorties)
     {
         $etats = $this->etatRepository->getlibelles();
 
@@ -114,7 +114,7 @@ class ChangeEtat
     }
 
 //Rechercher les sorties "annulées" pour lesquelles la date de début + durée est inférieure à la date/heure courante plus 1 mois et les passer en "historisée"
-    public function passAnnuleeArchivee(ArrayCollection $sorties)
+    public function passAnnuleeArchivee(Array $sorties)
     {
         $etats = $this->etatRepository->getlibelles();
 
