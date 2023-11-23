@@ -39,6 +39,20 @@ class EtatRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+    * @return Etat[]
+    */
+    public function getlibelles(): array
+    {
+        $etats = $this->findAll();
+        $newEtats = [];
+        foreach ($etats as $etat){
+            $newEtats[$etat->getLibelle()] = $etat;
+        }
+
+        return $newEtats;
+    }
+
 //    /**
 //     * @return Etat[] Returns an array of Etat objects
 //     */
