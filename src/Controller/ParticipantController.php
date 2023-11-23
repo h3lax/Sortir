@@ -73,11 +73,10 @@ class ParticipantController extends AbstractController
                         $newFilename
                     );
                 } catch (FileException $e) {
-                    // ... Si probleme...
+
                 }
 
-                // updates the 'brochureFilename' property to store the PDF file name
-                // instead of its contents
+
                 $participant->setPhotoProfil($newFilename);
             }
 

@@ -10,7 +10,7 @@ class EtatFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $etats=['Créée','Clôturée','Ouverte','En cours','Passée','Annulée'];
+        $etats=['Créée','Clôturée','Ouverte','En cours','Passée','Annulée','Archivée'];
 
         foreach ($etats as $libelle){
             $etat = new Etat();
