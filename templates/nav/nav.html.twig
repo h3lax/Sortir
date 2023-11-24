@@ -8,12 +8,17 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav ml-auto">
     {% if app.user %}
+      {% if is_granted('ROLE_ADMIN') %}
       <li class="nav-item active">
         <a class="nav-link" href="#">Ville <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#">Campus</a>
       </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{path('admin_creer')}}">Nouvel Utilisateur</a>
+        </li>
+      {% endif %}
       <li class="nav-item">
         <a class="nav-link" href="{{path('sortie_accueil')}}">Accueil</a>
       </li>
