@@ -1,23 +1,4 @@
 <header>
-    
-   <!-- <nav class="navbar navbar-right">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <h1><a href="{{path('sortie_accueil')}}" class="navbar-brand">Sortons !</h1></a>
-            </div>
-        <ul class="nav navbar-nav">
-            {% if app.user %}
-            <li class="active"><a href="#">Villes</a></li>
-            <li class="active"><a href="#">Campus</a></li>
-            <li class="active"><a href="{{path('sortie_accueil')}}">Accueil</a></li>
-            <li class="active"><a href="{{path('participant_profil')}}">Mon profil</a></li>
-            <li class="active"><a href="{{path('app_logout')}}">Se déconnecter</a></li>
-            {% endif %}
-       
-        </ul>
-        </div>
-    </nav>
-    -->
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <a class="navbar-brand" href="{{path('sortie_accueil')}}">Sortons !</a>
@@ -27,7 +8,12 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav ml-auto">
     {% if app.user %}
-
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Ville <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Campus</a>
+      </li>
       <li class="nav-item">
         <a class="nav-link" href="{{path('sortie_accueil')}}">Accueil</a>
       </li>
@@ -37,19 +23,6 @@
       <li class="nav-item">
         <a class="nav-link" href="{{path('app_logout')}}">Se déconnecter</a>
       </li>
-
-      {% if is_granted("ROLE_ADMIN") %}
-        <li class="nav-item">
-          <a class="nav-link" href="{{path('admin_creer')}}">Nouveau Participant</a>
-        </li>
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Ville <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Campus</a>
-        </li>
-      {% endif %}
-
       {% endif %}
     </ul>
   </div>
