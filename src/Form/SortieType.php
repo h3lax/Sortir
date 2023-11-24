@@ -28,7 +28,9 @@ class SortieType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom', TextType::class, ['label' => 'Nom de la sortie : '])
+            ->add('nom', TextType::class, [
+                'label' => 'Nom de la sortie : '
+                ])
             ->add('dateHeureDebut', DateTimeType::class,[
                 'label' => 'Date et heure de la sortie : ',
                 'html5' => true,
@@ -46,7 +48,7 @@ class SortieType extends AbstractType
                 'label' => 'Campus',
                 'class' => Campus::class,
                 'choice_label' => 'nom',
-                'data'=> $this->security->getUser()->getCampus()
+                'data'=> $this->security->getUser()->getCampus(),
                 ])
             ->add('ville', EntityType::class,[
                 'mapped'=> false,
@@ -58,42 +60,24 @@ class SortieType extends AbstractType
                 'label' => 'Lieu',
                 'class' => Lieu::class,
                 'choice_label' => 'nom',
-                'attr'=>[
-                    'class'=> 'hidden-lieu',
-                    'style'=> 'display:none;'
-                ],
-                'label_attr'=>[
-                    'class'=> 'hidden-lieu',
-                    'style'=> 'display:none;'
-                ],
             ])
             ->add('latitude', NumberType::class, [
                 'mapped'=> false,
-                'attr'=>[
-                    'class'=> 'hidden-coord',
-                    'style'=> 'display:none;'
-                ],
-                'label_attr'=>[
-                    'class'=> 'hidden-coord',
-                    'style'=> 'display:none;'
-                ],
                 ])
             ->add('longitude', NumberType::class, [
                 'mapped'=> false,
-                'attr'=>[
-                    'class'=> 'hidden-coord',
-                    'style'=> 'display:none;'
-                ],
-                'label_attr'=>[
-                    'class'=> 'hidden-coord',
-                    'style'=> 'display:none;'
-                ],
                 ])
             ->add('save', SubmitType::class, [
-                'label'=> 'Enregistrer'
+                'label'=> 'Enregistrer',
+                'attr'=>[
+                    'class'=>'btn btn-info'
+                ]
             ])
             ->add('push', SubmitType::class, [
-                'label'=> 'Publier'
+                'label'=> 'Publier',
+                'attr'=>[
+                    'class'=>'btn btn-success'
+                ]
             ])
         ;
 

@@ -52,6 +52,9 @@ class SortieRepository extends ServiceEntityRepository
         $queryBuilder
             ->andWhere('s.siteOrganisateur = :campus')
             ->setParameter('campus', $donnees->campus);
+        $queryBuilder
+            ->andWhere('e.libelle != :archiv')
+            ->setParameter('archiv', 'Archivée');
 
         if (!empty($donnees->recherche)) {
             $queryBuilder
