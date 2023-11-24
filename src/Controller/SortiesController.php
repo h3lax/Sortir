@@ -223,7 +223,7 @@ class SortiesController extends AbstractController
         if($this -> isCsrfTokenValid('cancel'.$id, $request->get('_token'))){
             $sortie = $sortieRepository->find($id);
             $motif = $request->request->get('motif').
-                ("\n\n---------Description----------\n").
+                ("<br><br>---------Description----------<br>").
                 $sortie->getInfosSortie();
             $sortie->setInfosSortie($motif);
             $sortie->setEtat($etats['Annulée']);
