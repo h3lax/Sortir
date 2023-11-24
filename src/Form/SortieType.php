@@ -28,7 +28,9 @@ class SortieType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom', TextType::class, ['label' => 'Nom de la sortie : '])
+            ->add('nom', TextType::class, [
+                'label' => 'Nom de la sortie : '
+                ])
             ->add('dateHeureDebut', DateTimeType::class,[
                 'label' => 'Date et heure de la sortie : ',
                 'html5' => true,
@@ -46,7 +48,7 @@ class SortieType extends AbstractType
                 'label' => 'Campus',
                 'class' => Campus::class,
                 'choice_label' => 'nom',
-                'data'=> $this->security->getUser()->getCampus()
+                'data'=> $this->security->getUser()->getCampus(),
                 ])
             ->add('ville', EntityType::class,[
                 'mapped'=> false,
@@ -66,10 +68,16 @@ class SortieType extends AbstractType
                 'mapped'=> false,
                 ])
             ->add('save', SubmitType::class, [
-                'label'=> 'Enregistrer'
+                'label'=> 'Enregistrer',
+                'attr'=>[
+                    'class'=>'btn btn-info'
+                ]
             ])
             ->add('push', SubmitType::class, [
-                'label'=> 'Publier'
+                'label'=> 'Publier',
+                'attr'=>[
+                    'class'=>'btn btn-success'
+                ]
             ])
         ;
 

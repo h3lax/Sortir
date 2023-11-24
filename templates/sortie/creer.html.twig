@@ -3,16 +3,40 @@
 {% block title %}Créer une sortie | {{ parent() }}{% endblock %}
 
 {% block body %}
-
-    <div>
-        {{ form_start(sortieForm) }}
-        {{ form_widget(sortieForm) }}
-        {{ form_end(sortieForm) }}
-        <a href="{{ path('sortie_accueil') }}">Annuler</a>
-        <script src="{{ asset('js/sortiesTypeScript.js') }}" data-url='../api/' defer></script>
-
+    {{ form_start(sortieForm) }}
+    <div class="container">
+        <div class="row">
+            <div class="col form-group">{{ form_row(sortieForm.nom) }}</div>
+            <div class="col form-group">{{ form_row(sortieForm.siteOrganisateur) }}</div>
+        </div>
+        <div class="row">
+            <div class="col form-group">{{ form_row(sortieForm.dateHeureDebut) }}</div>
+            <div class="col form-group">{{ form_row(sortieForm.ville) }}</div>
+        </div>
+        <div class="row">
+            <div class="col form-group">{{ form_row(sortieForm.dateLimiteInscription) }}</div>
+            <div class="col form-group">{{ form_row(sortieForm.latitude) }}</div>
+        </div>
+        <div class="row">
+            <div class="col form-group">{{ form_row(sortieForm.nbInscriptionsMax) }}</div>
+            <div class="col form-group">{{ form_row(sortieForm.lieu) }}</div>
+        </div>
+        <div class="row">
+            <div class="col form-group">{{ form_row(sortieForm.duree) }}</div>
+            <div class="col form-group">{{ form_row(sortieForm.longitude) }}</div>
+        </div>
+        <div class="row">
+            <div class="col form-group">{{ form_row(sortieForm.infosSortie) }}</div>
+            <div class="col"></div>
+        </div>
+        <div class="row">
+            <div class="col">{{ form_row(sortieForm.save) }}</div>
+            <div class="col">{{ form_row(sortieForm.push) }}</div>
+            <div class="col"><a class="btn btn-default" href="{{ path('sortie_accueil') }}" role="button">Annuler</a></div>
+        </div>
     </div>
-
+    {{ form_end(sortieForm) }}
+    <script src="{{ asset('js/sortiesTypeScript.js') }}" data-url='../api/' defer></script>
 
 {% endblock %}
 
