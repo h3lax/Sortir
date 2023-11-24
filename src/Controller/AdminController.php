@@ -43,13 +43,8 @@ class AdminController extends AbstractController
                 $participant->setMotPasse(
                     $mdpHasher->hashPassword( $participant, $motPasse ) );
             }
-
-            //$entityManager ->persist($participant);
-            //$entityManager->flush();
-
             $this->addFlash('success', 'Participant créé avec succès.');
 
-            return $this->redirectToRoute('admin_creer');
         }
 
         $entityManager ->persist($participant);
